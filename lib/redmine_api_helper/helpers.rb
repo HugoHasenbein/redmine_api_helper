@@ -43,6 +43,5 @@ module RedmineAPIHelper
     include RedmineAPIHelper::UsersAPIHelper
     include RedmineAPIHelper::WikiPagesAPIHelper
     
-    include RedmineAPIHelper::Version
   end
 end 
