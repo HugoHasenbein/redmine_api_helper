@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.version                       = RedmineAPIHelper::VERSION
   spec.authors                       = ["Stephan Wenzel"]
   spec.email                         = ["stephan.wenzel@drwpatent.de"]
-  spec.license                       = 'GPL-2.0-only'
+  spec.license                       = 'GPL-2.0'
   
   spec.summary                       = %q{redmine_api_helper aids creating fiddles for redmine_scripting_engine}
   spec.description                   = %q{redmine_api_helper contains methods to ease handling Redmine API calls}
@@ -29,5 +29,5 @@ Gem::Specification.new do |spec|
   spec.executables                   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths                 = ["lib"]
   
-  spec.add_runtime_dependency 'deep_try'
+  spec.add_runtime_dependency 'deep_try', '~> 0'
 end
