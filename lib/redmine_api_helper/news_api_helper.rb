@@ -52,21 +52,21 @@ module RedmineAPIHelper
   # list_news result, corresponds to controller#index
   ########################################################################################
   def list_news(params={})
-    list_objects(:news, params)
+    list_objects(:news_index, params)
   end #def
   
   ########################################################################################
   # list_news result, corresponds to controller#index
   ########################################################################################
   def list_project_news(project_id, params={})
-    list_project_objects(project_id, :news, params)
+    list_project_objects(project_id, :news_index, params)
   end #def
   
   ########################################################################################
-  # list_news result, corresponds to controller#index
+  # read_news result, corresponds to controller#show
   ########################################################################################
-  def read_news(params={})
-    read_object(:news, params)
+  def read_news(id, params={})
+    read_object(:news, id, params)
   end #def
   
   end #module
