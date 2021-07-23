@@ -31,7 +31,7 @@ module RedmineAPIHelper
   # lists issue_priorities, corresponds to controller#index
   ########################################################################################
   def list_issue_priorities(params={})
-    list_objects(:issue_priority, params)
+    list_objects(:issue_priorities, params)
   end #def
   
   end #module

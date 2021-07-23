@@ -31,7 +31,7 @@ module RedmineAPIHelper
   # lists time_entries, corresponds to controller#index
   ########################################################################################
   def list_time_entry_activities(params={})
-    list_objects(:time_entry_activity, params)
+    list_objects(:time_entry_activities, params)
   end #def
   
   end #module

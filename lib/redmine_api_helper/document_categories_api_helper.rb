@@ -31,7 +31,7 @@ module RedmineAPIHelper
   # lists document_categories, corresponds to controller#index
   ########################################################################################
   def list_document_categories(params={})
-    list_objects(:document_category, params)
+    list_objects(:document_categories, params)
   end #def
   
   end #module

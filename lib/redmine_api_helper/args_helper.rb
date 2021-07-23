@@ -17,13 +17,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
+require 'deep_try'
+
 module RedmineAPIHelper
   module ArgsHelper
   
   ########################################################################################
   # iterates over current object, set index for functions accessing current object
   ########################################################################################
-  def current(&block)
+  def objects(&block)
     args.objects.map do |object|
       obj = yield object
       @index += 1 unless @index + 1 >= args.objects.length

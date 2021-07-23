@@ -38,7 +38,7 @@ module RedmineAPIHelper
   # reads project_news_url from args
   ########################################################################################
   def project_news_index_url(project_id)
-    [args.urls.Project, project_id, "news"].join("/")
+    [project_url(project_id), "news"].join("/")
   end #def
   
   ########################################################################################

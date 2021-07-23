@@ -17,6 +17,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
+
 module RedmineAPIHelper
   module APIHelper
   
@@ -27,72 +28,89 @@ module RedmineAPIHelper
   LIMIT_REDIRECTS = 10
   
   ########################################################################################
-  # lists objects, corresponds to controller#index
+  # returns error
   ########################################################################################
-  def list_objects(object, params={})
-    objects = object.to_s.pluralize.to_sym
-    jget(:url => send("#{objects}_url"), :params => params ).send(objects) 
+  def error(err)
+    OpenStruct.new(:error => err.message, :backtrace => err.backtrace)
   end #def
   
-  def list_project_objects(project_id, object, params={})
-    objects = object.to_s.pluralize.to_sym
-    jget(:url => send("project_#{objects}_url", project_id), :params => params ).send(objects) 
+  ########################################################################################
+  # lists objects, corresponds to controller#index
+  ########################################################################################
+  def list_objects(objects, params={})
+    jget(:url => send("#{objects}_url"), :params => params ).send(objects) 
+  rescue Exception => err
+    error(err)
+  end #def
+  
+  def list_project_objects(project_id, objects, params={})
+    jget(:url => send("project_#{objects}_url", project_id), :params => params ).send(objects)
+  rescue Exception => err
+    error(err)
   end #def
   
   ########################################################################################
   # reads object having id, corresponds to controller#show
   ########################################################################################
   def read_object(object, id, params={})
-    objects = object.to_s.pluralize.to_sym
-    jget(:url => [send("#{objects}_url"), id].join("/"), :params => params ).send(object.to_s.to_sym)
+    jget(:url => send("#{object}_url", id), :params => params ).send(object)
+  rescue Exception => err
+    error(err)
   end #def
   
   def read_project_object(project_id, object, id, params={})
-    objects = object.to_s.pluralize.to_sym
-    jget(:url => [send("project_#{objects}_url", project_id), id].join("/"), :params => params ).send(object.to_s.to_sym)
+    jget(:url => send("project_#{object}_url", project_id, id), :params => params ).send(object)
+  rescue Exception => err
+    error(err)
   end #def
   
   ########################################################################################
   # creates a new object with params, corresponds to controller#create
   ########################################################################################
   def create_object(object, params={})
-    objects = object.to_s.pluralize.to_sym
-    jpost({object.to_s.to_sym => params}, :url => send("#{objects}_url") ).send(object.to_s.to_sym)
+    jpost( {object => params}, :url => send("#{object.to_s.pluralize}_url") ).send(object)
+  rescue Exception => err
+    error(err)
   end #def
   
   def create_project_object(project_id, object, params={})
-    objects = object.to_s.pluralize.to_sym
-    jpost({object.to_s.to_sym => params}, :url => send("project_#{objects}_url", project_id) ).send(object.to_s.to_sym)
+    jpost( {object => params}, :url => send("project_#{object.to_s.pluralize}_url", project_id) ).send(object)
+  rescue Exception => err
+    error(err)
   end #def
   
   ########################################################################################
   # updates an existing object with params, corresponds to controller#update
   ########################################################################################
   def update_object(object, id, params={})
-    objects = object.to_s.pluralize.to_sym
-    jput({object.to_s.to_sym  => params}, :url => [send("#{objects}_url"), id].join("/") )
+    jput( {object  => params}, :url => send("#{object}_url") )
+  rescue Exception => err
+    error(err)
   end #def
   
   def update_project_object(project_id, object, id, params={})
-    objects = object.to_s.pluralize.to_sym
-    jput({object.to_s.to_sym  => params}, :url => [send("project_#{objects}_url", project_id), id].join("/") )
+    jput( {object  => params}, :url => send("project_#{object}_url", project_id, id) )
+  rescue Exception => err
+    error(err)
   end #def
   
   ########################################################################################
   # deletes an existing object with params, corresponds to controller#destroy
   ########################################################################################
   def destroy_object(object, id, params={})
-    objects = object.to_s.pluralize.to_sym
-    jdel(:url => [send("#{objects}_url"), id].join("/"), :params => params )
+    jdel(:url => send("#{object}_url" id), :params => params )
+  rescue Exception => err
+    error(err)
   end #def
   
   def destroy_project_object(project_id, object, id, params={})
-    objects = object.to_s.pluralize.to_sym
-    jdel(:url => [send("project_#{objects}_url", project_id), id].join("/"), :params => params )
+    jdel(:url => send("project_#{object}_url", project_id, id), :params => params )
+  rescue Exception => err
+    error(err)
   end #def
   
   ########################################################################################
-  # jget(options), get request
+  # fetch(options), get request
   ########################################################################################
   def fetch(options={})
     
@@ -130,7 +148,7 @@ module RedmineAPIHelper
   def jget(options={})
     
     index                    = options[:index].to_i
-    json                     = options[:json].nil? ? true : !!options[:json]
+    json                     = options[:json].nil? || !!options[:json]
     params                   = json ? options[:params].to_h.merge(:format => "json").to_query : options[:params].to_h.to_query
     content_type             = json ? "application/json" : options[:content_type]
     api                      = options[:api_key].nil? ? true : !!options[:api_key]
@@ -160,7 +178,7 @@ module RedmineAPIHelper
   def jput(body, options={})
     
     index                    = options[:index].to_i
-    json                     = options[:json].nil? ? true : !!options[:json]
+    json                     = options[:json].nil? || !!options[:json]
     params                   = json ? options[:params].to_h.merge(:format => "json").to_query : options[:params].to_h.to_query
     content_type             = json ? "application/json" : options[:content_type]
     api                      = options[:api_key].nil? ? true : !!options[:api_key]
@@ -193,7 +211,7 @@ module RedmineAPIHelper
   def jpost(body, options={})
     
     index                    = options[:index].to_i
-    json                     = options[:json].nil? ? true : !!options[:json]
+    json                     = options[:json].nil? || !!options[:json]
     params                   = json ? options[:params].to_h.merge(:format => "json").to_query : options[:params].to_h.to_query
     content_type             = json ? "application/json" : options[:content_type]
     api                      = options[:api_key].nil? ? true : !!options[:api_key]
@@ -226,7 +244,7 @@ module RedmineAPIHelper
   def jdel(options={})
     
     index                    = options[:index].to_i
-    json                     = options[:json].nil? ? true : !!options[:json]
+    json                     = options[:json].nil? || !!options[:json]
     params                   = json ? options[:params].to_h.merge(:format => "json").to_query : options[:params].to_h.to_query
     content_type             = json ? "application/json" : options[:content_type]
     api                      = options[:api_key].nil? ? true : !!options[:api_key]

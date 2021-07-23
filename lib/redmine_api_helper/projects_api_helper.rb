@@ -38,7 +38,7 @@ module RedmineAPIHelper
   # lists projects, corresponds to controller#index
   ########################################################################################
   def list_projects(params={})
-    list_objects(:project, params)
+    list_objects(:projects, params)
   end #def
   
   ########################################################################################

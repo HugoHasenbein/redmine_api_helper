@@ -31,7 +31,7 @@ module RedmineAPIHelper
   # lists roles, corresponds to controller#index
   ########################################################################################
   def list_roles(params={})
-    list_objects(:role, params)
+    list_objects(:roles, params)
   end #def
   
   ########################################################################################

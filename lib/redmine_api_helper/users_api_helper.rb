@@ -38,7 +38,7 @@ module RedmineAPIHelper
   # lists users, corresponds to controller#index
   ########################################################################################
   def list_users(params={})
-    list_objects(:user, params)
+    list_objects(:users, params)
   end #def
   
   ########################################################################################

@@ -38,7 +38,7 @@ module RedmineAPIHelper
   # reads issues_url from args
   ########################################################################################
   def project_issues_url(project_id)
-    [args.urls.Project, project_id, 'issues'].join("/")
+    [project_url(project_id), 'issues'].join("/")
   end #def
   
   ########################################################################################
@@ -52,14 +52,14 @@ module RedmineAPIHelper
   # lists issues, corresponds to controller#index
   ########################################################################################
   def list_issues(params={})
-    list_objects(:issue, params)
+    list_objects(:issues, params)
   end #def
   
   ########################################################################################
   # lists project issues, corresponds to controller#index
   ########################################################################################
   def list_project_issues(project_id, params={})
-    list_project_objects(project_id, :issue, params)
+    list_project_objects(project_id, :issues, params)
   end #def
   
   ########################################################################################

@@ -24,7 +24,7 @@ module RedmineAPIHelper
   # reads wiki_pages_url from args
   ########################################################################################
   def project_wiki_pages_url(project_id)
-    [args.urls.Project, project_id, "wiki"].join("/")
+    [project_url(project_id), "wiki"].join("/")
   end #def
   
   ########################################################################################

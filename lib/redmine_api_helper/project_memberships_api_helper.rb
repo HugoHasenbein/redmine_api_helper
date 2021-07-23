@@ -24,7 +24,7 @@ module RedmineAPIHelper
   # reads projects_url from args
   ########################################################################################
   def project_memberships_url(project_id)
-    [args.urls.Project, project_id, "memberships"].join("/")
+    [project_url(project_id), "memberships"].join("/")
   end #def
   
   def memberships_url
@@ -35,7 +35,7 @@ module RedmineAPIHelper
   # lists projects, corresponds to controller#index
   ########################################################################################
   def list_project_memberships(project_id, params={})
-    list_project_objects(project_id, :membership, params)
+    list_project_objects(project_id, :memberships, params)
   end #def
   
   ########################################################################################

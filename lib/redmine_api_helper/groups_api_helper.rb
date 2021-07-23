@@ -38,7 +38,7 @@ module RedmineAPIHelper
   # lists groups, corresponds to controller#index
   ########################################################################################
   def list_groups(params={})
-    list_objects(:group, params)
+    list_objects(:groups, params)
   end #def
   
   ########################################################################################

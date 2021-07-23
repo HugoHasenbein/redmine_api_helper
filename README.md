@@ -10,7 +10,7 @@ RedmineAPIHelper aids creating fiddles for redmine_scripting_engine
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'redmine_api_helper', git: 'https://github.com/HugoHasenbein/redmine_api_helper', branch: :main
+gem 'redmine_api_helper'
 ```
 
 And then execute:

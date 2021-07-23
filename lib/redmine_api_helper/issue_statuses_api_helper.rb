@@ -29,7 +29,7 @@ module RedmineAPIHelper
   # lists issue_statuses, corresponds to controller#index
   ########################################################################################
   def list_issue_statuses(params={})
-    list_objects(:issue_status, params)
+    list_objects(:issue_statuses, params)
   end #def
   
   end #module
