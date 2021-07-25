@@ -23,49 +23,49 @@ module RedmineAPIHelper
   ########################################################################################
   # reads users_url from args
   ########################################################################################
-  def users_url
-    args.urls.User
+  def users_url(**params)
+    url_path(args.urls.Home, "users", params)
   end #def
   
   ########################################################################################
   # crerate user_url
   ########################################################################################
-  def user_url(id)
-    [users_url,id].join("/")
+  def user_url(id, **params)
+    url_path(users_url, id, **params)
   end #def
   
   ########################################################################################
   # lists users, corresponds to controller#index
   ########################################################################################
-  def list_users(params={})
+  def list_users(**params)
     list_objects(:users, params)
   end #def
   
   ########################################################################################
   # reads user having id, corresponds to controller#show
   ########################################################################################
-  def read_user(id, params={})
+  def read_user(id, **params)
     read_object(:user, id, params)
   end #def
   
   ########################################################################################
   # creates a new user with params, corresponds to controller#create
   ########################################################################################
-  def create_user(params={})
+  def create_user(**params)
     create_object(:user, params)
   end #def
   
   ########################################################################################
   # updates an existing user with params, corresponds to controller#update
   ########################################################################################
-  def update_user(id, params={})
+  def update_user(id, **params)
     update_object(:user, id, params)
   end #def
   
   ########################################################################################
   # deletes an existing user with params, corresponds to controller#destroy
   ########################################################################################
-  def destroy_user(id, params={})
+  def destroy_user(id, **params)
     destroy_object(:user, id, params)
   end #def
   

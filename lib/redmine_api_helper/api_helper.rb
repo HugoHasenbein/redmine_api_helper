@@ -35,6 +35,17 @@ module RedmineAPIHelper
   end #def
   
   ########################################################################################
+  # assembles url from fragments
+  ########################################################################################
+  def url_path(*fragments, **options)
+    [fragments.map do |fragment|
+       fragment.to_s.gsub(/\/\z/,"")
+     end.join("/"),
+     options.to_query.presence
+    ].compact.join("?")
+  end #def
+  
+  ########################################################################################
   # lists objects, corresponds to controller#index
   ########################################################################################
   def list_objects(objects, params={})
@@ -83,7 +94,7 @@ module RedmineAPIHelper
   # updates an existing object with params, corresponds to controller#update
   ########################################################################################
   def update_object(object, id, params={})
-    jput( {object  => params}, :url => send("#{object}_url") )
+    jput( {object  => params}, :url => send("#{object}_url", id) )
   rescue Exception => err
     error(err)
   end #def
@@ -98,7 +109,7 @@ module RedmineAPIHelper
   # deletes an existing object with params, corresponds to controller#destroy
   ########################################################################################
   def destroy_object(object, id, params={})
-    jdel(:url => send("#{object}_url" id), :params => params )
+    jdel(:url => send("#{object}_url", id), :params => params )
   rescue Exception => err
     error(err)
   end #def

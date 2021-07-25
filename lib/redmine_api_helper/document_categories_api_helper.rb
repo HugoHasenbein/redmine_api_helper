@@ -23,14 +23,14 @@ module RedmineAPIHelper
   ########################################################################################
   # reads document_categories_url from args
   ########################################################################################
-  def document_categories_url
-    [args.urls.Enumeration, "document_categories"].join("/")
+  def document_categories_url(**params)
+    url_path(args.urls.Home, "enumerations", "document_categories", params)
   end #def
   
   ########################################################################################
   # lists document_categories, corresponds to controller#index
   ########################################################################################
-  def list_document_categories(params={})
+  def list_document_categories(**params)
     list_objects(:document_categories, params)
   end #def
   

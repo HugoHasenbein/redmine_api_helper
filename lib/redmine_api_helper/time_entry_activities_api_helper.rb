@@ -23,14 +23,14 @@ module RedmineAPIHelper
   ########################################################################################
   # reads time_entry_activities_url from args
   ########################################################################################
-  def time_entry_activities_url
-    [args.urls.Enumeration, "time_entry_activities"].join("/")
+  def time_entry_activities_url(**params)
+    url_path(args.urls.Home, "enumerations", "time_entry_activities", params)
   end #def
   
   ########################################################################################
   # lists time_entries, corresponds to controller#index
   ########################################################################################
-  def list_time_entry_activities(params={})
+  def list_time_entry_activities(**params)
     list_objects(:time_entry_activities, params)
   end #def
   

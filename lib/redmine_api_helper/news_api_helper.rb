@@ -23,49 +23,49 @@ module RedmineAPIHelper
   ########################################################################################
   # reads news_url from args
   ########################################################################################
-  def news_index_url
-    args.urls.News
+  def news_index_url(**params)
+    url_path(args.urls.Home, "news", params)
   end #def
   
   ########################################################################################
   # creates new_url
   ########################################################################################
-  def news_url(id)
-    [news_index_url, id].join("/")
+  def news_url(id, **params)
+    url_path(news_index_url, id, params)
   end #def
   
   ########################################################################################
   # reads project_news_url from args
   ########################################################################################
-  def project_news_index_url(project_id)
-    [project_url(project_id), "news"].join("/")
+  def project_news_index_url(project_id, **params)
+    url_path(project_url(project_id), "news", params)
   end #def
   
   ########################################################################################
   # creates project_new_url 
   ########################################################################################
-  def project_news_url(project_id, id)
-    [project_news_index_url(project_id), id].join("/")
+  def project_news_url(project_id, id, **params)
+    url_path(project_news_index_url(project_id), id, params)
   end #def
   
   ########################################################################################
   # list_news result, corresponds to controller#index
   ########################################################################################
-  def list_news(params={})
-    list_objects(:news_index, params)
+  def list_news(**params)
+    jget(:url => news_index_url, :params => params ).news
   end #def
   
   ########################################################################################
   # list_news result, corresponds to controller#index
   ########################################################################################
-  def list_project_news(project_id, params={})
-    list_project_objects(project_id, :news_index, params)
+  def list_project_news(project_id, **params)
+    jget(:url => project_news_index_url(project_id), :params => params ).news
   end #def
   
   ########################################################################################
   # read_news result, corresponds to controller#show
   ########################################################################################
-  def read_news(id, params={})
+  def read_news(id, **params)
     read_object(:news, id, params)
   end #def
   

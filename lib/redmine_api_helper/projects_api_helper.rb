@@ -23,49 +23,49 @@ module RedmineAPIHelper
   ########################################################################################
   # reads projects_url from args
   ########################################################################################
-  def projects_url
-    args.urls.Project
+  def projects_url(**params)
+    url_path(args.urls.Home, "projects", params)
   end #def
   
   ########################################################################################
   # creates project_url
   ########################################################################################
-  def project_url(id)
-    [projects_url,id].join("/")
+  def project_url(id, **params)
+    url_path(projects_url, id, params)
   end #def
   
   ########################################################################################
   # lists projects, corresponds to controller#index
   ########################################################################################
-  def list_projects(params={})
+  def list_projects(**params)
     list_objects(:projects, params)
   end #def
   
   ########################################################################################
   # reads project having id, corresponds to controller#show
   ########################################################################################
-  def read_project(id, params={})
+  def read_project(id, **params)
     read_object(:project, id, params)
   end #def
   
   ########################################################################################
   # creates a new project with params, corresponds to controller#create
   ########################################################################################
-  def create_project(params={})
+  def create_project(**params)
     create_object(:project, params)
   end #def
   
   ########################################################################################
   # updates an existing project with params, corresponds to controller#update
   ########################################################################################
-  def update_project(id, params={})
+  def update_project(id, **params)
     update_object(:project, id, params)
   end #def
   
   ########################################################################################
   # deletes an existing project with params, corresponds to controller#destroy
   ########################################################################################
-  def destroy_project(id, params={})
+  def destroy_project(id, **params)
     destroy_object(:project, id, params)
   end #def
   

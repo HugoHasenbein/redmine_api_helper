@@ -23,70 +23,70 @@ module RedmineAPIHelper
   ########################################################################################
   # reads issues_url from args
   ########################################################################################
-  def issues_url
-    args.urls.Issue
+  def issues_url(**params)
+    url_path(args.urls.Home, "issues", params)
   end #def
   
   ########################################################################################
   # creates issue_url
   ########################################################################################
-  def issue_url(id)
-    [issues_url, id].join("/")
+  def issue_url(id, **params)
+    url_path(issues_url, id, params)
   end #def
   
   ########################################################################################
   # reads issues_url from args
   ########################################################################################
-  def project_issues_url(project_id)
-    [project_url(project_id), 'issues'].join("/")
+  def project_issues_url(project_id, **params)
+    url_path(project_url(project_id), 'issues', params)
   end #def
   
   ########################################################################################
   # creates project_issue_url
   ########################################################################################
-  def project_issue_url(project_id, id)
-    [project_issues_url(project_id), id].join("/")
+  def project_issue_url(project_id, id, **params)
+    url_path(project_issues_url(project_id), id, params)
   end #def
   
   ########################################################################################
   # lists issues, corresponds to controller#index
   ########################################################################################
-  def list_issues(params={})
+  def list_issues(**params)
     list_objects(:issues, params)
   end #def
   
   ########################################################################################
   # lists project issues, corresponds to controller#index
   ########################################################################################
-  def list_project_issues(project_id, params={})
+  def list_project_issues(project_id, **params)
     list_project_objects(project_id, :issues, params)
   end #def
   
   ########################################################################################
   # reads issue having id, corresponds to controller#show
   ########################################################################################
-  def read_issue(id, params={})
+  def read_issue(id, **params)
     read_object(:issue, id, params)
   end #def
   
   ########################################################################################
   # creates a new issue with params, corresponds to controller#create
   ########################################################################################
-  def create_issue(params={})
+  def create_issue(**params)
     create_object(:issue, params)
   end #def
   
   ########################################################################################
   # updates an existing issue with params, corresponds to controller#update
   ########################################################################################
-  def update_issue(id, params={})
+  def update_issue(id, **params)
     update_object(:issue, id, params)
   end #def
   
   ########################################################################################
   # 'bulk_updates' existing issues with params, simulate controller#bulk_update
   ########################################################################################
-  def update_issues(ids, params={})
+  def update_issues(ids, **params)
     ids.each do |id|
       update_object(:issue, id, params)
     end
@@ -95,28 +95,28 @@ module RedmineAPIHelper
   ########################################################################################
   # deletes an existing issue with params, corresponds to controller#destroy
   ########################################################################################
-  def destroy_issue(id, params={})
+  def destroy_issue(id, **params)
     destroy_object(:issue, id, params)
   end #def
   
   ########################################################################################
   # reads watchers_url from args
   ########################################################################################
-  def watchers_url
-    args.urls.Watch
+  def watchers_url(**params)
+    url_path(args.urls.Watch, params)
   end #def
   
   ########################################################################################
   # creates a watcher with params, corresponds to watchers#create: params: user_id
   ########################################################################################
-  def create_issue_watcher(issue_id, user_id, params={})
+  def create_issue_watcher(issue_id, user_id, **params)
     jpost(params.merge(:object_type => 'issue', :object_id => issue_id, :user_id => user_id), :url => watchers_url )
   end #def
   
   ########################################################################################
   # deletes a watcher with params, corresponds to watchers#destroy
   ########################################################################################
-  def destroy_issue_watcher(issue_id, user_id, params={})
+  def destroy_issue_watcher(issue_id, user_id, **params)
     jdel(:url => watchers_url, :params => params.merge(:object_type => 'issue', :object_id => issue_id, :user_id => user_id))
   end #def
   

@@ -23,42 +23,49 @@ module RedmineAPIHelper
   ########################################################################################
   # reads time_entries_url from args
   ########################################################################################
-  def time_entries_url
-    args.urls.TimeEntry
+  def time_entries_url(**params)
+    url_path(args.urls.Home, "time_entries", params)
+  end #def
+  
+  ########################################################################################
+  # creates a time_entry_url
+  ########################################################################################
+  def time_entry_url(id, **params)
+    url_path(time_entries_url, id, params)
   end #def
   
   ########################################################################################
   # lists time_entries, corresponds to controller#index
   ########################################################################################
-  def list_time_entries(params={})
+  def list_time_entries(**params)
     list_objects(:time_entries, params)
   end #def
   
   ########################################################################################
   # reads time_entry having id, corresponds to controller#show
   ########################################################################################
-  def read_time_entry(id, params={})
+  def read_time_entry(id, **params)
     read_object(:time_entry, id, params)
   end #def
   
   ########################################################################################
   # creates a new time_entry with params, corresponds to controller#create
   ########################################################################################
-  def create_time_entry(params={})
+  def create_time_entry(**params)
     create_object(:time_entry, params)
   end #def
   
   ########################################################################################
   # updates an existing time_entry with params, corresponds to controller#update
   ########################################################################################
-  def update_time_entry(id, params={})
+  def update_time_entry(id, **params)
     update_object(:time_entry, id, params)
   end #def
   
   ########################################################################################
   # deletes an existing time_entry with params, corresponds to controller#destroy
   ########################################################################################
-  def destroy_time_entry(id, params={})
+  def destroy_time_entry(id, **params)
     destroy_object(:time_entry, id, params)
   end #def
   

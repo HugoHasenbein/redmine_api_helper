@@ -21,14 +21,14 @@ module RedmineAPIHelper
   ########################################################################################
   # reads issue_statuses_url from args
   ########################################################################################
-  def issue_statuses_url
-    args.urls.IssueStatus
+  def issue_statuses_url(**params)
+    url_path(args.urls.Home, "issue_statuses", params)
   end #def
   
   ########################################################################################
   # lists issue_statuses, corresponds to controller#index
   ########################################################################################
-  def list_issue_statuses(params={})
+  def list_issue_statuses(**params)
     list_objects(:issue_statuses, params)
   end #def
   

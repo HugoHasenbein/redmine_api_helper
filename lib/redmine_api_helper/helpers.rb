@@ -23,6 +23,7 @@ module RedmineAPIHelper
   module Helpers
     include RedmineAPIHelper::APIHelper
     include RedmineAPIHelper::ArgsHelper
+    include RedmineAPIHelper::DefineAPIHelpers
     
     include RedmineAPIHelper::AttachmentsAPIHelper
     include RedmineAPIHelper::DocumentCategoriesAPIHelper

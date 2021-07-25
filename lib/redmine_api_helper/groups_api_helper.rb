@@ -23,56 +23,56 @@ module RedmineAPIHelper
   ########################################################################################
   # reads groups_url from args
   ########################################################################################
-  def groups_url
-    args.urls.Group
+  def groups_url(**params)
+    url_path(args.urls.Home, "groups", params)
   end #def
   
   ########################################################################################
   # creates group_url 
   ########################################################################################
-  def group_url(id)
-    [groups_url, id].join("/")
+  def group_url(id, **params)
+    url_path(groups_url, id, params)
   end #def
   
   ########################################################################################
   # lists groups, corresponds to controller#index
   ########################################################################################
-  def list_groups(params={})
+  def list_groups(**params)
     list_objects(:groups, params)
   end #def
   
   ########################################################################################
   # reads group having id, corresponds to controller#show
   ########################################################################################
-  def read_group(id, params={})
+  def read_group(id, **params)
     read_object(:group, id, params)
   end #def
   
   ########################################################################################
   # creates a new group with params, corresponds to controller#create
   ########################################################################################
-  def create_group(params={})
+  def create_group(**params)
     create_object(:group, params)
   end #def
   
   ########################################################################################
   # updates an existing group with params, corresponds to controller#update
   ########################################################################################
-  def update_group(id, params={})
+  def update_group(id, **params)
     update_object(:group, id, params)
   end #def
   
   ########################################################################################
   # updates an existing group with params, corresponds to controller#update
   ########################################################################################
-  def group_add_user(id, user_id, params={})
-    jpost(params.merge(:user_id => user_id), :url => [groups_url, id, "users"].join("/"))
+  def group_add_user(id, user_id, **params)
+    jpost(params.merge(:user_id => user_id), :url => url_path(groups_url, id, "users"))
   end #def
   
   ########################################################################################
   # deletes an existing group with params, corresponds to controller#destroy
   ########################################################################################
-  def destroy_group(id, params={})
+  def destroy_group(id, **params)
     destroy_object(:group, id, params)
   end #def
   

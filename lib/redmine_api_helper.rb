@@ -21,6 +21,7 @@
 
 require "redmine_api_helper/api_helper"
 require "redmine_api_helper/args_helper"
+require "redmine_api_helper/define_api_helpers"
 require "redmine_api_helper/attachments_api_helper"
 require "redmine_api_helper/document_categories_api_helper"
 require "redmine_api_helper/groups_api_helper"

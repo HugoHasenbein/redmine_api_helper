@@ -21,30 +21,30 @@ module RedmineAPIHelper
   module AttachmentsAPIHelper
   
   ########################################################################################
-  # reads attachments_url from args
+  # creates an attachment_url from args
   ########################################################################################
-  def attachments_url
-    args.urls.Attachment
+  def attachment_url(id, **params)
+    url_path(args.urls.Home, "attachments", id, params)
   end #def
   
   ########################################################################################
   # reads attachment having id, corresponds to controller#show
   ########################################################################################
-  def read_attachment(id, params={})
+  def read_attachment(id, **params)
     read_object(:attachment, id, params)
   end #def
   
   ########################################################################################
   # updates an existing attachment with params, corresponds to controller#update
   ########################################################################################
-  def update_attachment(id, params={})
+  def update_attachment(id, **params)
     update_object(:attachment, id, params)
   end #def
   
   ########################################################################################
   # deletes an existing attachment with params, corresponds to controller#destroy
   ########################################################################################
-  def destroy_attachment(id, params={})
+  def destroy_attachment(id, **params)
     destroy_object(:attachment, id, params)
   end #def
   

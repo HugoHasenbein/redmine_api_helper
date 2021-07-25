@@ -23,42 +23,42 @@ module RedmineAPIHelper
   ########################################################################################
   # reads issue_relations_url from args
   ########################################################################################
-  def issue_relations_url(issue_id)
-    [args.urls.Issue, issue_id, "relations"].join("/")
+  def issue_relations_url(issue_id, **params)
+    url_path(issue_url(issue_id), "relations", params)
   end #def
   
   ########################################################################################
   # reads relations_url from args
   ########################################################################################
-  def relation_url(id)
-    [args.urls.Home, "relations", id].join("/")
+  def relation_url(id, **params)
+    url_path(args.urls.Home, "relations", id, params)
   end #def
   
   ########################################################################################
   # lists issue_relations, corresponds to controller#index
   ########################################################################################
-  def list_issue_relations(issue_id, params={})
+  def list_issue_relations(issue_id, **params)
     jget(:url => issue_relations_url(issue_id), :params => params).relations
   end #def
   
   ########################################################################################
   # reads issue having id, corresponds to controller#show
   ########################################################################################
-  def read_relation(id, params={})
+  def read_relation(id, **params)
     jget(:url => relation_url(id), :params => params).relation
   end #def
   
   ########################################################################################
   # creates a new issue with params, corresponds to controller#create
   ########################################################################################
-  def create_issue_relation(issue_id, params={})
+  def create_issue_relation(issue_id, **params)
     jpost(params, :url => issue_relations_url(issue_id)).relation
   end #def
   
   ########################################################################################
   # deletes an existing issue with params, corresponds to controller#destroy
   ########################################################################################
-  def destroy_relation(id, params={})
+  def destroy_relation(id, **params)
     jdel(:url => relation_url(id), :params => params)
   end #def
   

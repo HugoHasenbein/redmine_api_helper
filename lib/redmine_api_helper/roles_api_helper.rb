@@ -23,21 +23,28 @@ module RedmineAPIHelper
   ########################################################################################
   # reads roles_url from args
   ########################################################################################
-  def roles_url
-    args.urls.Role
+  def roles_url(**params)
+    url_path(args.urls.Home, "roles", params)
+  end #def
+  
+  ########################################################################################
+  # creates a role_url
+  ########################################################################################
+  def role_url(id, **params)
+    url_path(roles_url, id, params)
   end #def
   
   ########################################################################################
   # lists roles, corresponds to controller#index
   ########################################################################################
-  def list_roles(params={})
+  def list_roles(**params)
     list_objects(:roles, params)
   end #def
   
   ########################################################################################
   # read role, corresponds to controller#show
   ########################################################################################
-  def read_role(id, params={})
+  def read_role(id, **params)
     read_object(:role, id, params)
   end #def
   

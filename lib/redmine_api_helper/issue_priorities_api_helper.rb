@@ -23,14 +23,14 @@ module RedmineAPIHelper
   ########################################################################################
   # reads issue_priorities_url from args
   ########################################################################################
-  def issue_priorities_url
-    [args.urls.Enumeration, "issue_priorities"].join("/")
+  def issue_priorities_url(**params)
+    url_path(args.urls.Home, "enumerations", "issue_priorities", params)
   end #def
   
   ########################################################################################
   # lists issue_priorities, corresponds to controller#index
   ########################################################################################
-  def list_issue_priorities(params={})
+  def list_issue_priorities(**params)
     list_objects(:issue_priorities, params)
   end #def
   

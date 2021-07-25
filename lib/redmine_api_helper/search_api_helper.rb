@@ -23,15 +23,15 @@ module RedmineAPIHelper
   ########################################################################################
   # reads my_account_url from args
   ########################################################################################
-  def search_url
-    args.urls.Search
+  def search_url(**params)
+    url_path(args.urls.Home, "search", params)
   end #def
   
   ########################################################################################
   # list_search result, corresponds to controller#index
   ########################################################################################
-  def list_search(params={})
-    jget(:url => search_url, :params => params)
+  def list_search(**params)
+    jget(:url => search_url, :params => params).results
   end #def
   
   end #module

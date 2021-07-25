@@ -23,21 +23,21 @@ module RedmineAPIHelper
   ########################################################################################
   # reads my_account_url from args
   ########################################################################################
-  def my_account_url
-    args.urls.MyAccount
+  def my_account_url(**params)
+    url_path(args.urls.Home, "my", "account", params)
   end #def
   
   ########################################################################################
   # reads my account, corresponds to controller#show
   ########################################################################################
-  def read_my_account(params={})
+  def read_my_account(**params)
     jget(params.merge(:url => my_account_url)).user
   end #def
   
   ########################################################################################
   # updates my account with params, corresponds to controller#update
   ########################################################################################
-  def update_my_account(params={})
+  def update_my_account(**params)
     jput({:user => params}, :url => my_account_url)
   end #def
   

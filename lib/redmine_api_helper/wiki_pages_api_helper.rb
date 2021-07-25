@@ -23,43 +23,43 @@ module RedmineAPIHelper
   ########################################################################################
   # reads wiki_pages_url from args
   ########################################################################################
-  def project_wiki_pages_url(project_id)
-    [project_url(project_id), "wiki"].join("/")
+  def project_wiki_pages_url(project_id, **params)
+    url_path(project_url(project_id), "wiki", params)
   end #def
   
   ########################################################################################
   # creates wiki_page_url 
   ########################################################################################
-  def project_wiki_page_url(project_id, id)
-    [project_wiki_pages_url(project_id), id].join("/")
+  def project_wiki_page_url(project_id, id, **params)
+    url_path(project_wiki_pages_url(project_id), id, params)
   end #def
 
   ########################################################################################
   # lists wiki_pages, corresponds to controller#index
   ########################################################################################
-  def list_project_wiki_pages(project_id, params={})
-    jget(:url => [project_wiki_pages_url(project_id), "index"].join("/"), :params => params )
+  def list_project_wiki_pages(project_id, **params)
+    jget(:url => url_path(project_wiki_pages_url(project_id), "index"), :params => params )
   end #def
   
   ########################################################################################
   # reads wiki_page having id, corresponds to controller#show
   ########################################################################################
-  def read_project_wiki_page(project_id, title, params={})
-    jget(:url => [project_wiki_pages_url(project_id), title].join("/"), :params => params ).wiki_page
+  def read_project_wiki_page(project_id, title, **params)
+    jget(:url => url_path(project_wiki_pages_url(project_id), title), :params => params ).wiki_page
   end #def
   
   ########################################################################################
   # updates or creates an existing wiki_page with params, corresponds to controller#update
   ########################################################################################
-  def create_or_update_project_wiki_page(project_id, title, params={})
-    jput({:wiki_page => params}, :url => [project_wiki_pages_url(project_id), title].join("/"))
+  def create_or_update_project_wiki_page(project_id, title, **params)
+    jput({:wiki_page => params}, :url => url_path(project_wiki_pages_url(project_id), title))
   end #def
   
   ########################################################################################
   # deletes an existing wiki_page with params, corresponds to controller#destroy
   ########################################################################################
-  def destroy_project_wiki_page(project_id, id, params={})
-    jdel(:url => [project_wiki_pages_url(project_id), id].join("/"), :params => params )
+  def destroy_project_wiki_page(project_id, id, **params)
+    jdel(:url => url_path(project_wiki_pages_url(project_id), id), :params => params )
   end #def
   
   end #module

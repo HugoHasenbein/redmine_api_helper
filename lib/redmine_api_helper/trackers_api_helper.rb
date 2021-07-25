@@ -23,14 +23,14 @@ module RedmineAPIHelper
   ########################################################################################
   # reads trackers_url from args
   ########################################################################################
-  def trackers_url
-    args.urls.Tracker
+  def trackers_url(**params)
+    url_path(args.urls.Home, "trackers", params)
   end #def
   
   ########################################################################################
   # lists trackers, corresponds to controller#index
   ########################################################################################
-  def list_trackers(params={})
+  def list_trackers(**params)
     list_objects(:tracker, params)
   end #def
   
