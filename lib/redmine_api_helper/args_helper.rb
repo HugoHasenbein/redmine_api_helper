@@ -43,14 +43,25 @@ module RedmineAPIHelper
   ########################################################################################
   # serializes object to OpenStruct
   ########################################################################################
-  def serialize(object)
+  def serialize(object, **options)
     if object.is_a?(Hash)
-       return OpenStruct.new(object.map{ |key, val| [ key, serialize(val) ] }.to_h)
-     elsif object.is_a?(Array)
-       return object.map{ |o| serialize(o) }
-     else # assumed to be a primitive value
-       return object
-     end
+       OpenStruct.new(object.map{ |key, val| [ key, serialize(val, options) ] }.to_h)
+    elsif object.is_a?(Array)
+       object.map{ |obj| serialize(obj, options) }
+    else # assumed to be a primitive value
+      if options[:parse]
+        JSON.parse(object, object_class:OpenStruct) rescue object 
+      else
+        object
+      end
+    end
+  end #def
+  
+  ########################################################################################
+  # serializes JSON string to OpenStruct
+  ########################################################################################
+  def jparse(object)
+    serialize(object, :parse => true)
   end #def
   
   ########################################################################################

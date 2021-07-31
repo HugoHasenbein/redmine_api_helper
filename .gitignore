@@ -7,3 +7,5 @@
 /spec/reports/
 /tmp/
 *.gem
+redmine_api_helper-0.1.1.gem
+*.gem
