@@ -92,7 +92,7 @@ module RedmineAPIHelper
   def pretty_response(hr=@http_response)
     JSON.pretty_generate({
       :code => hr.try(:code),
-      :body => JSON.parse(hr.try(:body))
+      :body => JSON.parse(hr.try(:body).to_s)
     })
   end #def
   
