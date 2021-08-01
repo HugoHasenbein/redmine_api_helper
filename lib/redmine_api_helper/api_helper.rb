@@ -125,8 +125,12 @@ module RedmineAPIHelper
   ########################################################################################
   def fetch(options={})
     
+    # create query parameters
+    params                   = options[:params].to_h.to_query
+    url                      = options[:url]
+    
     # create GET request
-    uri                      = URI.parse(options[:url])
+    uri                      = URI.parse([url, params.presence].compact.join("?"))
     req                      = Net::HTTP::Get.new(uri.request_uri)
     
     # create HTTP handler
@@ -163,9 +167,10 @@ module RedmineAPIHelper
     params                   = json ? options[:params].to_h.merge(:format => "json").to_query : options[:params].to_h.to_query
     content_type             = json ? "application/json" : options[:content_type]
     api                      = options[:api_key].nil? ? true : !!options[:api_key]
+    url                      = options[:url].presence || args.objects[index].object_url
     
     # create GET request
-    uri                      = URI.parse(options[:url] ? [options[:url], params].join("?") : "#{args.objects[index].object_url}#{params}")
+    uri                      = URI.parse( [url, params.presence].compact.join("?"))
     req                      = Net::HTTP::Get.new(uri.request_uri)
     req["Content-Type"]      = "content_type" 
     req['X-Redmine-API-Key'] = args.api_key if api
@@ -193,9 +198,10 @@ module RedmineAPIHelper
     params                   = json ? options[:params].to_h.merge(:format => "json").to_query : options[:params].to_h.to_query
     content_type             = json ? "application/json" : options[:content_type]
     api                      = options[:api_key].nil? ? true : !!options[:api_key]
+    url                      = options[:url].presence || args.objects[index].object_url
     
     # create PUT request
-    uri                      = URI.parse(options[:url] ? [options[:url], params].join("?") : "#{args.objects[index].object_url}#{params}")
+    uri                      = URI.parse( [url, params.presence].compact.join("?"))
     req                      = Net::HTTP::Put.new(uri.request_uri)
     req["Content-Type"]      = content_type 
     req['X-Redmine-API-Key'] = args.api_key if api
@@ -226,9 +232,10 @@ module RedmineAPIHelper
     params                   = json ? options[:params].to_h.merge(:format => "json").to_query : options[:params].to_h.to_query
     content_type             = json ? "application/json" : options[:content_type]
     api                      = options[:api_key].nil? ? true : !!options[:api_key]
+    uri                      = URI.parse( [url, params.presence].compact.join("?"))
     
     # create POST request
-    uri                      = URI.parse(options[:url] ? [options[:url], params].join("?") : "#{args.objects[index].object_url}#{params}")
+    uri                      = URI.parse( [url, params.presence].compact.join("?"))
     req                      = Net::HTTP::Post.new(uri.request_uri)
     req["Content-Type"]      = content_type 
     req['X-Redmine-API-Key'] = args.api_key if api
@@ -259,9 +266,10 @@ module RedmineAPIHelper
     params                   = json ? options[:params].to_h.merge(:format => "json").to_query : options[:params].to_h.to_query
     content_type             = json ? "application/json" : options[:content_type]
     api                      = options[:api_key].nil? ? true : !!options[:api_key]
+    uri                      = URI.parse( [url, params.presence].compact.join("?"))
     
     # create DELETE request
-    uri                      = URI.parse(options[:url] ? [options[:url], params].join("?") : "#{args.objects[index].object_url}#{params}")
+    uri                      = URI.parse( [url, params.presence].compact.join("?"))
     req                      = Net::HTTP::Delete.new(uri.request_uri)
     req["Content-Type"]      = "content_type" 
     req['X-Redmine-API-Key'] = args.api_key if api
