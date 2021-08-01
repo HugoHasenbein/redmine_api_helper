@@ -99,8 +99,8 @@ module RedmineAPIHelper
   ########################################################################################
   # create html link
   ########################################################################################
-  def link_to(text, obj, id)
-    "<a href='#{[args.urls.try(obj.to_sym),id].join("/")}'>#{text}</a>"
+  def link_to(body, url)
+    "<a href='#{url}'>#{body}</a>"
   end #def
   
   end #module
