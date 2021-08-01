@@ -232,7 +232,7 @@ module RedmineAPIHelper
     params                   = json ? options[:params].to_h.merge(:format => "json").to_query : options[:params].to_h.to_query
     content_type             = json ? "application/json" : options[:content_type]
     api                      = options[:api_key].nil? ? true : !!options[:api_key]
-    uri                      = URI.parse( [url, params.presence].compact.join("?"))
+    url                      = options[:url].presence || args.objects[index].object_url
     
     # create POST request
     uri                      = URI.parse( [url, params.presence].compact.join("?"))
@@ -266,7 +266,7 @@ module RedmineAPIHelper
     params                   = json ? options[:params].to_h.merge(:format => "json").to_query : options[:params].to_h.to_query
     content_type             = json ? "application/json" : options[:content_type]
     api                      = options[:api_key].nil? ? true : !!options[:api_key]
-    uri                      = URI.parse( [url, params.presence].compact.join("?"))
+    url                      = options[:url].presence || args.objects[index].object_url
     
     # create DELETE request
     uri                      = URI.parse( [url, params.presence].compact.join("?"))
