@@ -30,7 +30,7 @@ module RedmineAPIHelper
   ########################################################################################
   # lists scripts, corresponds to controller#index
   ########################################################################################
-  def list_project_scripts(**params)
+  def list_project_scripts(project_id, **params)
     list_project_objects(project_id, :scripts, params)
   end #def
   
