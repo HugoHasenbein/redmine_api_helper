@@ -68,7 +68,7 @@ module RedmineAPIHelper
     # destroy_object #####################################################################
     %w(read update destroy).each do |action|
       define_singleton_method("#{action}_#{object}".to_sym) do |id, **params|
-        send("#{action}_object".to_sym, id, params)
+        send("#{action}_object".to_sym, object, id, params)
       end
     end
     

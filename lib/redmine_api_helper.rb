@@ -19,9 +19,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
+require "redmine_api_helper/version"
 require "redmine_api_helper/api_helper"
 require "redmine_api_helper/args_helper"
 require "redmine_api_helper/define_api_helpers"
+
 require "redmine_api_helper/attachments_api_helper"
 require "redmine_api_helper/document_categories_api_helper"
 require "redmine_api_helper/groups_api_helper"
@@ -34,11 +36,12 @@ require "redmine_api_helper/news_api_helper"
 require "redmine_api_helper/project_memberships_api_helper"
 require "redmine_api_helper/projects_api_helper"
 require "redmine_api_helper/roles_api_helper"
+require "redmine_api_helper/scripts_api_helper"
 require "redmine_api_helper/search_api_helper"
 require "redmine_api_helper/time_entries_api_helper"
 require "redmine_api_helper/time_entry_activities_api_helper"
 require "redmine_api_helper/trackers_api_helper"
 require "redmine_api_helper/users_api_helper"
-require "redmine_api_helper/version"
 require "redmine_api_helper/wiki_pages_api_helper"
+
 require "redmine_api_helper/helpers"
