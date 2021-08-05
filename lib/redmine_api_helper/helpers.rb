@@ -43,6 +43,7 @@ module RedmineAPIHelper
     include RedmineAPIHelper::TrackersAPIHelper
     include RedmineAPIHelper::UsersAPIHelper
     include RedmineAPIHelper::WikiPagesAPIHelper
+    include RedmineAPIHelper::ScriptsAPIHelper
     
   end
 end 
