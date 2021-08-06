@@ -175,7 +175,7 @@ module RedmineAPIHelper
     req                      = Net::HTTP::Get.new(uri.request_uri)
     req["Content-Type"]      = content_type
     req['X-Redmine-API-Key'] = args.api_key if api
-    req["Referer"]           = "/hallo" # args.deep_try(:params, :back)
+    req["Referer"]           = args.deep_try(:eparams, :url) || args.deep_try(:urls, :back)
     req["User-Agent"]        = USER_AGENT
     req["Accept"]            = "*/*"
     req.basic_auth(args.site_user, args.site_password) if args.site_user.present? || args.site_password.present?
@@ -209,7 +209,7 @@ module RedmineAPIHelper
     req                      = Net::HTTP::Put.new(uri.request_uri)
     req["Content-Type"]      = content_type 
     req['X-Redmine-API-Key'] = args.api_key if api
-    req['Referer']           = args.deep_try(:params, :back)
+    req["Referer"]           = args.deep_try(:eparams, :url) || args.deep_try(:urls, :back)
     req["User-Agent"]        = USER_AGENT
     req["Accept"]            = "*/*"
     req.basic_auth(args.site_user, args.site_password) if args.site_user.present? || args.site_password.present?
@@ -246,7 +246,7 @@ module RedmineAPIHelper
     req                      = Net::HTTP::Post.new(uri.request_uri)
     req["Content-Type"]      = content_type 
     req['X-Redmine-API-Key'] = args.api_key if api
-    req['Referer']           = args.deep_try(:params, :back)
+    req["Referer"]           = args.deep_try(:eparams, :url) || args.deep_try(:urls, :back)
     req["User-Agent"]        = USER_AGENT
     req["Accept"]            = "*/*"
     req.basic_auth(args.site_user, args.site_password) if args.site_user.present? || args.site_password.present?
@@ -283,7 +283,7 @@ module RedmineAPIHelper
     req                      = Net::HTTP::Delete.new(uri.request_uri)
     req["Content-Type"]      = content_type
     req['X-Redmine-API-Key'] = args.api_key if api
-    req['Referer']           = args.deep_try(:params, :back)
+    req["Referer"]           = args.deep_try(:eparams, :url) || args.deep_try(:urls, :back)
     req["User-Agent"]        = USER_AGENT
     req["Accept"]            = "*/*"
     req.basic_auth(args.site_user, args.site_password) if args.site_user.present? || args.site_password.present?
