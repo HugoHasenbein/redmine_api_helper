@@ -26,6 +26,7 @@ module RedmineAPIHelper
   ########################################################################################
   class TooManyRedirects < StandardError; end
   LIMIT_REDIRECTS = 10
+  USER_AGENT      = ["Redmine API Helper", RedmineAPIHelper::VERSION].JOIN(" ")
   
   ########################################################################################
   # returns error
@@ -172,8 +173,11 @@ module RedmineAPIHelper
     # create GET request
     uri                      = URI.parse( [url, params.presence].compact.join("?"))
     req                      = Net::HTTP::Get.new(uri.request_uri)
-    req["Content-Type"]      = "content_type" 
+    req["Content-Type"]      = content_type
     req['X-Redmine-API-Key'] = args.api_key if api
+    req['HTTP_REFERRER']     = args.deep_try(:params, :back)
+    req["User-Agent"]        = USER_AGENT
+    req["Accept"]            = "*/*"
     req.basic_auth(args.site_user, args.site_password) if args.site_user.present? || args.site_password.present?
     
     # create HTTP handler
@@ -205,6 +209,9 @@ module RedmineAPIHelper
     req                      = Net::HTTP::Put.new(uri.request_uri)
     req["Content-Type"]      = content_type 
     req['X-Redmine-API-Key'] = args.api_key if api
+    req['HTTP_REFERRER']     = args.deep_try(:params, :back)
+    req["User-Agent"]        = USER_AGENT
+    req["Accept"]            = "*/*"
     req.basic_auth(args.site_user, args.site_password) if args.site_user.present? || args.site_password.present?
     
     # create body
@@ -239,6 +246,9 @@ module RedmineAPIHelper
     req                      = Net::HTTP::Post.new(uri.request_uri)
     req["Content-Type"]      = content_type 
     req['X-Redmine-API-Key'] = args.api_key if api
+    req['HTTP_REFERRER']     = args.deep_try(:params, :back)
+    req["User-Agent"]        = USER_AGENT
+    req["Accept"]            = "*/*"
     req.basic_auth(args.site_user, args.site_password) if args.site_user.present? || args.site_password.present?
     
     # create body
@@ -271,8 +281,11 @@ module RedmineAPIHelper
     # create DELETE request
     uri                      = URI.parse( [url, params.presence].compact.join("?"))
     req                      = Net::HTTP::Delete.new(uri.request_uri)
-    req["Content-Type"]      = "content_type" 
+    req["Content-Type"]      = content_type
     req['X-Redmine-API-Key'] = args.api_key if api
+    req['HTTP_REFERRER']     = args.deep_try(:params, :back)
+    req["User-Agent"]        = USER_AGENT
+    req["Accept"]            = "*/*"
     req.basic_auth(args.site_user, args.site_password) if args.site_user.present? || args.site_password.present?
     
     # create HTTP handler
