@@ -26,7 +26,7 @@ module RedmineAPIHelper
   ########################################################################################
   class TooManyRedirects < StandardError; end
   LIMIT_REDIRECTS = 10
-  USER_AGENT      = ["Redmine API Helper", RedmineAPIHelper::VERSION].JOIN(" ")
+  USER_AGENT      = ["Redmine API Helper", RedmineAPIHelper::VERSION].join(" ")
   
   ########################################################################################
   # returns error
