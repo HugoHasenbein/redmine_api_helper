@@ -23,8 +23,36 @@ module RedmineAPIHelper
   ########################################################################################
   # reads scripts_url from args
   ########################################################################################
+  def scripts_url(**params)
+    url_path(args.urls.Home, 'scripts', params)
+  end #def
+  
+  ########################################################################################
+  # reads project_scripts_url from args
+  ########################################################################################
   def project_scripts_url(project_id, **params)
     url_path(project_url(project_id), 'scripts', params)
+  end #def
+  
+  ########################################################################################
+  # reads run_script_url from args
+  ########################################################################################
+  def run_script_url(id, **params)
+    url_path(scripts_url, id, 'run', params)
+  end #def
+  
+  ########################################################################################
+  # reads run_project_script_url from args
+  ########################################################################################
+  def run_project_script_url(project_id, id, **params)
+    url_path(project_scripts_url(project_id), id, 'run', params)
+  end #def
+  
+  ########################################################################################
+  # lists scripts, corresponds to controller#index
+  ########################################################################################
+  def list_scripts(project_id, **params)
+    list_objects(:scripts, params)
   end #def
   
   ########################################################################################
@@ -45,6 +73,13 @@ module RedmineAPIHelper
   # runs script having id, corresponds to controller#run
   ########################################################################################
   def run_script(id, **params)
+    jget(:url => run_script_url(id), :params => params ).script
+  end #def
+  
+  ########################################################################################
+  # runs script having id, corresponds to controller#run
+  ########################################################################################
+  def run_project_script(project_id, id, **params)
     jget(:url => run_project_script_url(project_id, id), :params => params ).script
   end #def
   
