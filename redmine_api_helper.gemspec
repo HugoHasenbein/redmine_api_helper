@@ -30,4 +30,7 @@ Gem::Specification.new do |spec|
   spec.require_paths                 = ["lib"]
   
   spec.add_runtime_dependency 'deep_try', '~> 0'
+  spec.add_runtime_dependency 'fileutils', '~> 0'
+  spec.add_runtime_dependency('rubyzip', "~> 1.2.0")
+  spec.add_runtime_dependency('nokogiri', ">= 1.5.0")
 end

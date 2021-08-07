@@ -45,3 +45,32 @@ require "redmine_api_helper/users_api_helper"
 require "redmine_api_helper/wiki_pages_api_helper"
 
 require "redmine_api_helper/helpers"
+
+# goodies ODF writer
+
+require 'zip'
+require 'fileutils'
+require 'nokogiri'
+
+require 'redmine_api_helper/odf_writer/parser/default'
+require 'redmine_api_helper/odf_writer/path_finder'
+require 'redmine_api_helper/odf_writer/nested'
+require 'redmine_api_helper/odf_writer/field'
+require 'redmine_api_helper/odf_writer/field_reader'
+require 'redmine_api_helper/odf_writer/text'
+require 'redmine_api_helper/odf_writer/text_reader'
+require 'redmine_api_helper/odf_writer/bookmark'
+require 'redmine_api_helper/odf_writer/bookmark_reader'
+require 'redmine_api_helper/odf_writer/image'
+require 'redmine_api_helper/odf_writer/image_reader'
+require 'redmine_api_helper/odf_writer/table'
+require 'redmine_api_helper/odf_writer/table_reader'
+require 'redmine_api_helper/odf_writer/section'
+require 'redmine_api_helper/odf_writer/section_reader'
+require 'redmine_api_helper/odf_writer/images'
+require 'redmine_api_helper/odf_writer/template'
+require 'redmine_api_helper/odf_writer/document'
+require 'redmine_api_helper/odf_writer/style'
+require 'redmine_api_helper/odf_writer/list_style'
+
+
