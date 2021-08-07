@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# aids creating fiddles for redmine_scripting_engine
+# Ruby Gem to create a self populating Open Document Format (.odf) text file.
 #
 # Copyright  2021 Stephan Wenzel <stephan.wenzel@drwpatent.de>
 #
@@ -19,6 +19,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
-module RedmineAPIHelper
-  VERSION = "0.3.6"
-end
+module ODFWriter
+  # 1.0.2 
+  #       - added arrify to document.rb
+  #
+  # 1.0.1 initial commit
+  #
+  VERSION = "1.0.2"
+end #module
