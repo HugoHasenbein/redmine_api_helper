@@ -45,6 +45,6 @@ module RedmineAPIHelper
     include RedmineAPIHelper::WikiPagesAPIHelper
     include RedmineAPIHelper::ScriptsAPIHelper
     
-    include RedmineAPIHelper::ODFWriter::ODFHelper
+    include ODFWriter::ODFHelper
   end
 end 
