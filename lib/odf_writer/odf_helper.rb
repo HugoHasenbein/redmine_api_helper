@@ -20,7 +20,7 @@
 
 module ODFWriter
   module ODFHelper
-  Rails.logger.info "----------------hello"
+  
     def export_odf(data, template)
     
       ####################################################################################
@@ -31,13 +31,14 @@ module ODFWriter
       ####################################################################################
       # add predefined styles to document
       ####################################################################################
-      add_style(     *ODFWriter::Style::ALL_STYLES)
-      add_list_style(*ODFWriter::Style::LIST_STYLES)
+        add_style(     *ODFWriter::Style::ALL_STYLES)
+        add_list_style(*ODFWriter::Style::LIST_STYLES)
       
       ####################################################################################
       # add readers to parse template for fields, texts, tables an section lists
       ####################################################################################
-      add_readers
+        add_readers
+      end
       
       ####################################################################################
       # populate template object
