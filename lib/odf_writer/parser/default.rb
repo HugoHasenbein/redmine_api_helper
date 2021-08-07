@@ -2,7 +2,7 @@
 #
 # Ruby Gem to create a self populating Open Document Format (.odf) text file.
 #
-# Copyright © 2021 Stephan Wenzel <stephan.wenzel@drwpatent.de>
+# Copyright  2021 Stephan Wenzel <stephan.wenzel@drwpatent.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -614,19 +614,19 @@ module ODFWriter
         style = ""
         
         #
-        # header… or…
+        # header or
         #
         if node.name =~ /h(\d)/i
           style = node.name.downcase
           
         #
-        # …quote… or…
+        # quote or
         #
         elsif node.name == "p" && node.parent && node.parent.name == "blockquote"
           style = "quote"
           
         #
-        # …pre
+        # pre
         #
         elsif node.name == "pre"
           style = "pre"
