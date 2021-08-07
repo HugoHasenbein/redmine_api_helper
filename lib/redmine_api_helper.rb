@@ -46,38 +46,7 @@ require "redmine_api_helper/wiki_pages_api_helper"
 
 require "redmine_api_helper/helpers"
 
-# goodies: ODF writer
 
-require 'zip'
-require 'fileutils'
-require 'nokogiri'
-
-require 'odf_writer/parser/default'
-require 'odf_writer/path_finder'
-require 'odf_writer/nested'
-require 'odf_writer/field'
-require 'odf_writer/field_reader'
-require 'odf_writer/text'
-require 'odf_writer/text_reader'
-require 'odf_writer/bookmark'
-require 'odf_writer/bookmark_reader'
-require 'odf_writer/image'
-require 'odf_writer/image_reader'
-require 'odf_writer/table'
-require 'odf_writer/table_reader'
-require 'odf_writer/section'
-require 'odf_writer/section_reader'
-require 'odf_writer/images'
-require 'odf_writer/template'
-require 'odf_writer/document'
-require 'odf_writer/style'
-require 'odf_writer/list_style'
-
-require 'odf_writer/odf_helper'
-
-# goodies: date
-
-require 'date_helper/date'
 
 
 
