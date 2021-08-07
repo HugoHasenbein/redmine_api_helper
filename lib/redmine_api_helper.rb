@@ -73,4 +73,5 @@ require 'odf_writer/document'
 require 'odf_writer/style'
 require 'odf_writer/list_style'
 
+require 'odf_writer/odf_helper'
 
