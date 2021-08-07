@@ -46,7 +46,7 @@ require "redmine_api_helper/wiki_pages_api_helper"
 
 require "redmine_api_helper/helpers"
 
-# goodies ODF writer
+# goodies: ODF writer
 
 require 'zip'
 require 'fileutils'
@@ -74,4 +74,10 @@ require 'odf_writer/style'
 require 'odf_writer/list_style'
 
 require 'odf_writer/odf_helper'
+
+# goodies: date
+
+require 'date_helper/date'
+
+
 
