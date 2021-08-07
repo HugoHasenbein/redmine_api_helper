@@ -18,9 +18,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
-module RedmineAPIHelper
+module ODFWriter
   module ODFHelper
-  
+  Rails.logger.info "----------------hello"
     def export_odf(data, template)
     
       ####################################################################################
