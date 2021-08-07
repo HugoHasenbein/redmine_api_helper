@@ -22,29 +22,29 @@
 module RedmineAPIHelper
   module Helpers
   
-    include APIHelper
-    include ArgsHelper
-    include DefineAPIHelpers
+    include RedmineAPIHelper::APIHelper
+    include RedmineAPIHelper::ArgsHelper
+    include RedmineAPIHelper::DefineAPIHelpers
     
-    include AttachmentsAPIHelper
-    include DocumentCategoriesAPIHelper
-    include GroupsAPIHelper
-    include IssuePrioritiesAPIHelper
-    include IssueRelationsAPIHelper
-    include IssueStatusesAPIHelper
-    include IssuesAPIHelper
-    include MyAccountAPIHelper
-    include NewsAPIHelper
-    include ProjectMembershipsAPIHelper
-    include ProjectsAPIHelper
-    include RolesAPIHelper
-    include SearchAPIHelper
-    include TimeEntriesAPIHelper
-    include TimeEntryActivitiesAPIHelper
-    include TrackersAPIHelper
-    include UsersAPIHelper
-    include WikiPagesAPIHelper
-    include ScriptsAPIHelper
+    include RedmineAPIHelper::AttachmentsAPIHelper
+    include RedmineAPIHelper::DocumentCategoriesAPIHelper
+    include RedmineAPIHelper::GroupsAPIHelper
+    include RedmineAPIHelper::IssuePrioritiesAPIHelper
+    include RedmineAPIHelper::IssueRelationsAPIHelper
+    include RedmineAPIHelper::IssueStatusesAPIHelper
+    include RedmineAPIHelper::IssuesAPIHelper
+    include RedmineAPIHelper::MyAccountAPIHelper
+    include RedmineAPIHelper::NewsAPIHelper
+    include RedmineAPIHelper::ProjectMembershipsAPIHelper
+    include RedmineAPIHelper::ProjectsAPIHelper
+    include RedmineAPIHelper::RolesAPIHelper
+    include RedmineAPIHelper::SearchAPIHelper
+    include RedmineAPIHelper::TimeEntriesAPIHelper
+    include RedmineAPIHelper::TimeEntryActivitiesAPIHelper
+    include RedmineAPIHelper::TrackersAPIHelper
+    include RedmineAPIHelper::UsersAPIHelper
+    include RedmineAPIHelper::WikiPagesAPIHelper
+    include RedmineAPIHelper::ScriptsAPIHelper
     
   end
 end 
