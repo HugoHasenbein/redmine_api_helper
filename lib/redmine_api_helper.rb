@@ -19,6 +19,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
+require "deep_try"
+
 require "redmine_api_helper/version"
 require "redmine_api_helper/api_helper"
 require "redmine_api_helper/args_helper"
@@ -46,7 +48,38 @@ require "redmine_api_helper/wiki_pages_api_helper"
 
 require "redmine_api_helper/helpers"
 
+# goodie: odf_writer
 
+require "zip"
+require "nokogiri"
+require 'digest'
 
+require "odf_writer/parser/default"
+require "odf_writer/path_finder"
+
+require "odf_writer/nested"
+require "odf_writer/field"
+require "odf_writer/field_reader"
+require "odf_writer/text"
+require "odf_writer/text_reader"
+require "odf_writer/bookmark"
+require "odf_writer/bookmark_reader"
+require "odf_writer/image"
+require "odf_writer/image_reader"
+require "odf_writer/table"
+require "odf_writer/table_reader"
+require "odf_writer/section"
+require "odf_writer/section_reader"
+require "odf_writer/images"
+require "odf_writer/template"
+require "odf_writer/document"
+require "odf_writer/style"
+require "odf_writer/list_style"
+
+require "odf_writer/odf_helper"
+
+# goodie: date forward
+
+require "date_helper/date"
 
 

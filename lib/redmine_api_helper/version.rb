@@ -20,5 +20,5 @@
 #
 
 module RedmineAPIHelper
-  VERSION = "0.3.6"
+  VERSION = "0.3.21"
 end

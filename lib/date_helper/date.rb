@@ -27,7 +27,7 @@ class Date
   # Date.today.calc(<rule>) -> [<new_date>, <new_rule>]
   # Date.today.forward(<rule)  ->  <new_date>
   # 
-  # <rule>: [DWmMqy][n][FMLWX][-!*]
+  # <rule>: [DWmMqY][n][FMLWX][-!W*]
   #
   # 1. parameter: epoch-identifier (necessary)
   # 
@@ -59,6 +59,7 @@ class Date
   #      deleted, so no further resubmissions happen
   #  ! - the sign "!" is a force sign to force date calculation even if a resubmission date
   #      present
+  #  W - the sign "W" in this position corrects the date to the next working day 
   #  * - the sign "*" is a mock switch. The mock-switch is deleted from the resubmission-rule
   #      and no resubmission-date is calculated. Needed for Redmine Attribute-Quickie plugin
   #      
@@ -89,20 +90,21 @@ class Date
     
       m = parse_rule( rule )
       
-      if m['mockswitch'].present?
+      if m['mockswitch']
       
         # mockswitch does not calculate anything
         # mockswitch is removed from new_rule, however
         new_rule = unmock( rule, m )
         
-      elsif self <= Date.today || m['force'].present?
+      elsif self <= Date.today || m['force']
       
-        if( m['epoch'].present? && m['num'].present? )
+        if( m['epoch'] && m['num'] )
         
           new_date = move(   m['epoch'], m['num'] )
           new_date = new_date.adjust( m['epoch'], m['pos'], self )
+          new_date = new_date.adjust("D", "W", new_date) if m["workingday"] # adjust working day
           
-          if m['killswitch'].present?
+          if m['killswitch']
             new_rule  = "" 
           else
             new_rule  = rule
@@ -281,15 +283,16 @@ class Date
   def parse_rule(rule)
   
     m = {}
-    matches = /(?<epoch>[DWMYCmq])(?<num>[0-9]+)(?<pos>[XFMLW]?)(?<kfm>[-!\*]*)(?<trailing_rest>.*)/.match(rule)
+    matches = /(?<epoch>[DWMYCmq])(?<num>[0-9]+)(?<pos>[XFMLW]?)(?<kfmw>[-!W\*]*)(?<trailing_rest>.*)/.match(rule)
     
     if matches.present?
       m.merge!(Hash[ matches.names.zip( matches.captures ) ])
-      m.merge!('killswitch' => m['kfm'].match(/-/).to_s)
-      m.merge!('force'      => m['kfm'].match(/!/).to_s)
-      m.merge!('mockswitch' => m['kfm'].match(/\*/).to_s)
+      m.merge!('killswitch' => m['kfmw'].match(/-/).to_s.presence)
+      m.merge!('force'      => m['kfmw'].match(/!/).to_s.presence)
+      m.merge!('mockswitch' => m['kfmw'].match(/\*/).to_s.presence)
+      m.merge!('workingday' => m['kfmw'].match(/W/).to_s.presence)
     end
-    m
+    m.compact
   end #def
   
   ####################################################################################
