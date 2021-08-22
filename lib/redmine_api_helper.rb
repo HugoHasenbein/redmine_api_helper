@@ -20,6 +20,9 @@
 #
 
 require "deep_try"
+require 'net/http'
+require "active_support/json"
+require 'active_support/core_ext/object/to_query'
 
 require "redmine_api_helper/version"
 require "redmine_api_helper/api_helper"
