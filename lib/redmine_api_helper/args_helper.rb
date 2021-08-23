@@ -24,7 +24,7 @@ module RedmineAPIHelper
   ########################################################################################
   # iterates over current object, set index for functions accessing current object
   ########################################################################################
-  def objects(&block)
+  def iterate(&block)
     args.objects.map do |object|
       obj = yield object
       @index += 1 unless @index + 1 >= args.objects.length
