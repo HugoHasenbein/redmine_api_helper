@@ -31,8 +31,8 @@ module ODFWriter
       ####################################################################################
       # add predefined styles to document
       ####################################################################################
-        add_style(     *ODFWriter::Style::ALL_STYLES)
-        add_list_style(*ODFWriter::Style::LIST_STYLES)
+        document.add_style(      :content, *ODFWriter::Style::ALL_STYLES  )
+        document.add_list_style( :content, *ODFWriter::Style::LIST_STYLES )
       
       ####################################################################################
       # add readers to parse template for fields, texts, tables an section lists

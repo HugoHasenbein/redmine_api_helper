@@ -205,7 +205,9 @@ module ODFWriter
     #
     ######################################################################################
     def add_style(root, *styles )
-      @styles[root] ||= []; @styles[root] << Style.new( *styles )
+      styles.each do |style|
+        @styles[root] ||= []; @styles[root] << Style.new( style )
+      end
     end #def
     
     ######################################################################################

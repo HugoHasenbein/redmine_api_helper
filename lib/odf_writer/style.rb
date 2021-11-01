@@ -69,7 +69,7 @@ module ODFWriter
         automatic_styles                  << create_style( doc, style ) if automatic_styles.present?
         
         if @font.present?
-          font_declarations               << create_font( doc, @font ) if font_declarations.present?
+          font_declarations               << create_font( doc, @font )  if font_declarations.present?
         end
       end
       
@@ -82,8 +82,8 @@ module ODFWriter
     ######################################################################################
     private
     
-    def create_font( xml, font )
-      node                               = Nokogiri::XML::Node.new('style:font-face', xml)
+    def create_font( doc, font )
+      node                               = Nokogiri::XML::Node.new('style:font-face', doc)
       node["style:name"]                 = font[:font_name]
       node["svg:font-family"]            = font[:font_family]
       node["style:font-family-generic"]  = font[:font_family_generic]
@@ -91,9 +91,9 @@ module ODFWriter
       node
     end #def
     
-    def create_style( xml, style )
+    def create_style( doc, style )
         
-      node            = Nokogiri::XML::Node.new('style:style', xml)
+      node            = Nokogiri::XML::Node.new('style:style', doc)
       
       #
       # common properties
@@ -104,7 +104,7 @@ module ODFWriter
           node["style:name"]                                  =style.to_s
           node["style:family"]                                ="text"
           
-          text_properties = Nokogiri::XML::Node.new('style:text-properties', xml)
+          text_properties = Nokogiri::XML::Node.new('style:text-properties', doc)
           node << text_properties
           
         when /h(\d)/i
@@ -114,10 +114,10 @@ module ODFWriter
           node["style:next-style-name"]                       ="subparagraph"
           node["style:default-outline-level"]                 =$1
           
-          paragraph_properties = Nokogiri::XML::Node.new('style:paragraph-properties', xml)
+          paragraph_properties = Nokogiri::XML::Node.new('style:paragraph-properties', doc)
           node << paragraph_properties
           
-          text_properties = Nokogiri::XML::Node.new('style:text-properties', xml)
+          text_properties = Nokogiri::XML::Node.new('style:text-properties', doc)
           node << text_properties
           
         when :p, :mono, :monoright, :cling
@@ -127,10 +127,10 @@ module ODFWriter
           node["style:next-style-name"]                       ="paragraph"
           node["style:default-outline-level"]                 =$1
           
-          paragraph_properties = Nokogiri::XML::Node.new('style:paragraph-properties', xml)
+          paragraph_properties = Nokogiri::XML::Node.new('style:paragraph-properties', doc)
           node << paragraph_properties
           
-          text_properties = Nokogiri::XML::Node.new('style:text-properties', xml)
+          text_properties = Nokogiri::XML::Node.new('style:text-properties', doc)
           node << text_properties
           
         when :subparagraph
@@ -140,10 +140,10 @@ module ODFWriter
           node["style:next-style-name"]                       ="subparagraph"
           node["style:default-outline-level"]                 =$1
           
-          paragraph_properties = Nokogiri::XML::Node.new('style:paragraph-properties', xml)
+          paragraph_properties = Nokogiri::XML::Node.new('style:paragraph-properties', doc)
           node << paragraph_properties
           
-          text_properties = Nokogiri::XML::Node.new('style:text-properties', xml)
+          text_properties = Nokogiri::XML::Node.new('style:text-properties', doc)
           node << text_properties
 
         when :center, :left, :right, :justify
@@ -151,7 +151,7 @@ module ODFWriter
           node["style:family"]                                ="paragraph"
           node["style:parent-style-name"]                     ="paragraph"
           
-          paragraph_properties = Nokogiri::XML::Node.new('style:paragraph-properties', xml)
+          paragraph_properties = Nokogiri::XML::Node.new('style:paragraph-properties', doc)
           node << paragraph_properties
           
         when :quote, :pre
@@ -159,38 +159,38 @@ module ODFWriter
           node["style:family"]                                ="paragraph"
           node["style:parent-style-name"]                     ="body"
           
-          paragraph_properties = Nokogiri::XML::Node.new('style:paragraph-properties', xml)
+          paragraph_properties = Nokogiri::XML::Node.new('style:paragraph-properties', doc)
           node << paragraph_properties
           
-          text_properties = Nokogiri::XML::Node.new('style:text-properties', xml)
+          text_properties = Nokogiri::XML::Node.new('style:text-properties', doc)
           node << text_properties
           
         when :table, :list, :listmedium, :invoice, :boxes, :caption, :thrifty, :tiny
           node["style:name"]                                  =style.to_s
           node["style:family"]                                ="table"
           
-          table_properties = Nokogiri::XML::Node.new('style:table-properties', xml)
+          table_properties = Nokogiri::XML::Node.new('style:table-properties', doc)
           node << table_properties
           
         when :tr
           node["style:name"]                                  =style.to_s
           node["style:family"]                                ="table-row"
           
-          table_row_properties = Nokogiri::XML::Node.new('style:table-row-properties', xml)
+          table_row_properties = Nokogiri::XML::Node.new('style:table-row-properties', doc)
           node << table_row_properties
           
         when :tc, :tcnarrow, :tcwide
           node["style:name"]                                  =style.to_s
           node["style:family"]                                ="table-column"
           
-          table_column_properties = Nokogiri::XML::Node.new('style:table-column-properties', xml)
+          table_column_properties = Nokogiri::XML::Node.new('style:table-column-properties', doc)
           node << table_column_properties
           
         when :td, :tdbott, :tdhead, :tdfoot, :tdbox
           node["style:name"]                                  =style.to_s
           node["style:family"]                                ="table-cell"
           
-          table_cell_properties = Nokogiri::XML::Node.new('style:table-cell-properties', xml)
+          table_cell_properties = Nokogiri::XML::Node.new('style:table-cell-properties', doc)
           node << table_cell_properties
           
       end
