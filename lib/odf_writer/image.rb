@@ -105,7 +105,8 @@ module ODFWriter
     # is_image?
     ######################################################################################
     def is_image?(obj)
-      obj.is_a?(Hash) && (obj.keys & [:filename, :width, :height, :bytes]).length == 4
+      obj.respond_to?(:keys) && 
+      (obj.keys.map(&:to_sym) & [:filename, :width, :height, :bytes]).length == 4
     end #def
     
     ######################################################################################
