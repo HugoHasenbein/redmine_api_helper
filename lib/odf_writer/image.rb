@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
-require 'webrick/httputils' # needed for Rack::Mime
+require 'rack/mime' # needed for Rack::Mime
 
 module ODFWriter
 
