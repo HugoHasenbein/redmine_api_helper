@@ -242,12 +242,6 @@ module ODFWriter
     ######################################################################################
     def leafs( file, doc)
       results={}
-# requires Rails
-#       results.deep_merge! @bookmark_readers[file].map { |r| r.paths(file, doc) }.inject{|m,n| m.deep_merge(n){|k, v1,v2| v1 + v2}} if @bookmark_readers[file]
-#       results.deep_merge! @field_readers[file].map    { |r| r.paths(file, doc) }.inject{|m,n| m.deep_merge(n){|k, v1,v2| v1 + v2}} if @field_readers[file]
-#       results.deep_merge! @text_readers[file].map     { |r| r.paths(file, doc) }.inject{|m,n| m.deep_merge(n){|k, v1,v2| v1 + v2}} if @text_readers[file]
-#       results.deep_merge! @image_readers[file].map    { |r| r.paths(file, doc) }.inject{|m,n| m.deep_merge(n){|k, v1,v2| v1 + v2}} if @image_readers[file]
-
         results = deep_merge( results, @bookmark_readers[file].map { |r| r.paths(file, doc) }.inject{|m,n| deep_merge(m, n)} ) if @bookmark_readers[file]
         results = deep_merge( results, @field_readers[file].map    { |r| r.paths(file, doc) }.inject{|m,n| deep_merge(m, n)} ) if @field_readers[file]
         results = deep_merge( results, @text_readers[file].map     { |r| r.paths(file, doc) }.inject{|m,n| deep_merge(m, n)} ) if @text_readers[file]
@@ -315,8 +309,10 @@ module ODFWriter
     # write
     #
     ######################################################################################
-    def write(dest = nil)
+    def write(**options)
     
+      dest = options.delete(:dest)
+      
       @template.update_content do |template|
       
         template.update_files do |file, doc, manifest|
@@ -327,8 +323,8 @@ module ODFWriter
           @sections[file].to_a.each    { |s| s.replace!(doc, manifest, template)  }
           @tables[file].to_a.each      { |t| t.replace!(doc, manifest, template)  }
           
-          @texts[file].to_a.each       { |t| t.replace!(doc)  }
-          @fields[file].to_a.each      { |f| f.replace!(doc)  }
+          @texts[file].to_a.each       { |t| t.replace!(doc, options)  }
+          @fields[file].to_a.each      { |f| f.replace!(doc, options)  }
           
           @bookmarks[file].to_a.each   { |b| b.replace!(doc)  }
           @images[file].to_a.each      { |i| i.replace!(doc, manifest, template) }
