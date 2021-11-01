@@ -44,7 +44,7 @@ module ODFWriter
     
       image_data = value(item)
       
-      if is_image?(image_data) 
+      if image_data = is_image?(image_data) 
         
         # find placeholder image
         nodes = find_image_nodes( doc )
@@ -105,8 +105,23 @@ module ODFWriter
     # is_image?
     ######################################################################################
     def is_image?(obj)
-      obj.respond_to?(:keys) && 
-      (obj.keys.map(&:to_sym) & [:filename, :width, :height, :bytes]).length == 4
+      case obj
+      when Hash
+        if (obj.keys.map(&:to_sym) & 
+            [:filename, :width, :height, :bytes]).length == 4 
+          obj.symbolize_keys
+        end
+      else
+        if obj.respond_to?(:filename) &&
+           obj.respond_to?(:width) &&
+           obj.respond_to?(:height) &&
+           obj.respond_to?(:bytes)
+          {:filename => obj.filename,
+           :width    => obj.width,
+           :height   => obj.height,
+           :bytes    => obj.bytes }
+        end
+      end
     end #def
     
     ######################################################################################
