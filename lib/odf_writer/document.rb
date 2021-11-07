@@ -266,19 +266,19 @@ module ODFWriter
         case key
         when :fields
           names.each do |name|
-            add_field(file, name, :value => prok ? prok.call(object, name) : object.try(name.downcase.to_sym))
+            add_field(file, name, options.reverse_merge(:value => prok ? prok.call(object, name) : object.try(name.downcase.to_sym)))
           end #def
         when :texts
           names.each do |name|
-            add_text(file, name, :value => prok ? prok.call(object, name) : object.try(name.downcase.to_sym))
+            add_text(file, name, options.reverse_merge(:value => prok ? prok.call(object, name) : object.try(name.downcase.to_sym)))
           end #def
         when :bookmarks
           names.each do |name|
-            add_bookmark(file, name, :value => prok ? prok.call(object, name) : object.try(name.downcase.to_sym))
+            add_bookmark(file, name, options.reverse_merge(:value => prok ? prok.call(object, name) : object.try(name.downcase.to_sym)))
           end #def
         when :images
           names.each do |name|
-            add_image(file, name, :value => (prok ? prok.call(object, name) : object.try(name.downcase.to_sym)))
+            add_image(file, name, options.reverse_merge(:value => (prok ? prok.call(object, name) : object.try(name.downcase.to_sym))))
           end #def
         when :tables
           names.each do |name, table_tree|
