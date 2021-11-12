@@ -25,5 +25,5 @@ module ODFWriter
   #
   # 1.0.1 initial commit
   #
-  VERSION = "1.0.12"
+  VERSION = "1.0.13"
 end #module

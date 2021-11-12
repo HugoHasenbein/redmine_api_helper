@@ -112,21 +112,33 @@ module ODFWriter
     def update_files(&block)
       
       # get manifest, in case a file is added
-      @manifest = manifest; digest = Digest::MD5.hexdigest(@manifest)
+      # @manifest = manifest; digest = Digest::MD5.hexdigest(@manifest)
+      @manifest = manifest
+      
+      # the very first entry must be a file named "mimetype", not compressed
+      #mimetype = ::Zip::Entry.new("out.zip", "mimetype")
+      # file attribute 0 means binary file
+      #mimetype.internal_file_attributes = 0
+      #mimetype.compression_method = ::Zip::COMPRESSION_METHOD_STORE
+      #@output_stream.put_next_entry(mimetype)
+      @output_stream.put_next_entry("mimetype", nil, nil, ::Zip::COMPRESSION_METHOD_STORE)
+      @output_stream.write "application/vnd.oasis.opendocument.text"
       
       entries.each do |entry|
       
-        # search content files
-        if entry.directory?
-          next
-          
+        next if entry.directory?
+        next if entry.name == "mimetype" # neglect possible other mimetype files
+        next if entry.name == MANIFEST
+        
         # process content files
-        elsif CONTENT_ENTRIES.keys.include?(entry.name)
+        if CONTENT_ENTRIES.keys.include?(entry.name)
         
           entry.get_input_stream do |input_stream|
             file_content = input_stream.sysread
             file_symbol  = CONTENT_ENTRIES[entry.name][:symbol]
+            # process entry, if files are added, then @mainfest is changed
             process_entry(file_symbol, file_content, @manifest, &block)
+            
             @output_stream.put_next_entry(entry.name)
             @output_stream.write file_content
           end #do
@@ -140,10 +152,10 @@ module ODFWriter
       end #each
       
       # eventually write back content file
-      if @manifest && digest != Digest::MD5.hexdigest(@manifest)
+     #if @manifest && digest != Digest::MD5.hexdigest(@manifest)
         @output_stream.put_next_entry(MANIFEST)
         @output_stream.write @manifest
-      end #if
+     #end #if
       
     end #def
     
@@ -182,8 +194,8 @@ module ODFWriter
       manifest = nil
       entries.each do |entry|
         next if entry.directory?
-        entry.get_input_stream do |input_stream|
-          if MANIFEST == entry.name
+        if entry.name == MANIFEST
+          entry.get_input_stream do |input_stream|
             manifest = input_stream.sysread.dup
           end
         end
@@ -212,9 +224,9 @@ module ODFWriter
       
       # replace file_content and manifest in place
       # remove spurious whitespaces between tags ">  <" becomes "><"
-      file_content.replace(doc.to_xml(save_with: Nokogiri::XML::Node::SaveOptions::AS_XML).squish.gsub(/(?<=>)\s+(?=<)/, ""))
+      file_content.replace(doc.to_xml(save_with: Nokogiri::XML::Node::SaveOptions::AS_XML).squish.gsub(/(?<=>)\s+(?=<)/, "") + "\r\n")
       # Microsoft Words complains if no trailing newline is present
-      manifest.replace(man.to_xml(save_with: Nokogiri::XML::Node::SaveOptions::AS_XML))
+      manifest.replace(man.to_xml(save_with: Nokogiri::XML::Node::SaveOptions::AS_XML) + "\r\n")
       
     end #def
     

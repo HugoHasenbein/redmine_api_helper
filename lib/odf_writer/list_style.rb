@@ -231,8 +231,8 @@ module ODFWriter
           #
           list_number                                           = Nokogiri::XML::Node.new('text:list-level-style-number', doc) 
           list_number['text:level']                             = "2"
-          list_number['style:num-suffix']                        = "."
-          list_number['style:num-format']                        = "1"
+          list_number['style:num-suffix']                       = "."
+          list_number['style:num-format']                       = "1"
           node << list_number
           
           list_level                                            = Nokogiri::XML::Node.new('style:list-level-properties', doc)
@@ -244,7 +244,7 @@ module ODFWriter
           list_label['text:list-tab-stop-position']             = "1.5cm"
           list_label['fo:text-indent']                          = "-0.5cm"
           list_label['fo:margin-left']                          = "1.5cm"
-          node << list_label
+          list_level << list_label
           
           #
           # Level 3

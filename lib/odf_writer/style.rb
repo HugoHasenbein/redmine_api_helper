@@ -33,12 +33,24 @@ module ODFWriter
     # constants
     #
     ######################################################################################
-    ALL_STYLES  = [:h1, :h2, :h3, :h4, :h5, :h6, :p, :mono, :monoright, :subparagraph, 
-                   :center, :left, :right, :justify, :cling, :bold, :underline, :italic, 
-                   :strikethrough, :sup, :sub, :a, :pre, :quote, :code, :table, :thrifty,
-                   :list, :listmedium, :invoice, :boxes, :caption, :tiny, :tr, :td, 
-                   :tdbott, :tdbox, :tdhead, :tdfoot, :tc, :tcnarrow, :tcwide, :large, 
-                   :medium, :small]
+    DOC_STYLES  = [:h1, :h2, :h3, :h4, :h5, :h6,                   # header        style
+                   :paragraph, :subparagraph, :redmine             # paragraph     style
+                   ]
+                   
+    AUT_STYLES  = [:bold, :underline, :italic, :strikethrough,     # character     style
+                   :sub, :sup, :code, :a, :large, :medium, :small, # character     style
+                                                                 
+                   :center, :left, :right, :justify,               # paragraph     style
+                   :p, :mono, :monoright, :monocenter, :cling,     # paragraph     style
+                   :quote, :pre,                                   # paragraph     style
+                    
+                   :table, :thrifty, :tiny, :list, :listmedium,    # table         style
+                   :invoice, :boxes, :caption,                     # table         style
+                   
+                   :tr, :td, :tdbott, :tdbox, :tdhead, :tdfoot,    # table content style
+                   :tc, :tcnarrow, :tcwide, :tcfixed, :tcauto      # table content style
+                   ]
+                   
     LIST_STYLES = [:ul, :ol]
     
     ######################################################################################
@@ -57,7 +69,7 @@ module ODFWriter
     # add_style
     #
     ######################################################################################
-    def add_style( doc )
+    def add_automatic_style( doc )
       ns                                   = doc.collect_namespaces
       automatic_styles                     = doc.at("//office:automatic-styles", ns)
       font_declarations                    = doc.at("//office:font-face-decls", ns)
@@ -65,7 +77,6 @@ module ODFWriter
       @styles.each do |style|
         
         @font = nil # will be set in create_style
-        
         automatic_styles                  << create_style( doc, style ) if automatic_styles.present?
         
         if @font.present?
@@ -74,6 +85,29 @@ module ODFWriter
       end
       
     end #def
+    
+    ######################################################################################
+    #
+    # add_style
+    #
+    ######################################################################################
+    def add_document_style( doc )
+      ns                                   = doc.collect_namespaces
+      automatic_styles                     = doc.at("//office:document-styles", ns)
+      font_declarations                    = doc.at("//office:font-face-decls", ns)
+      
+      @styles.each do |style|
+        
+        @font = nil # will be set in create_style
+        automatic_styles                  << create_style( doc, style ) if automatic_styles.present?
+        
+        if @font.present?
+          font_declarations               << create_font( doc, @font )  if font_declarations.present?
+        end
+      end
+      
+    end #def
+    
     
     ######################################################################################
     #
@@ -91,114 +125,112 @@ module ODFWriter
       node
     end #def
     
-    def create_style( doc, style )
+    def create_style( doc, stylename )
         
-      node            = Nokogiri::XML::Node.new('style:style', doc)
+      style            = Nokogiri::XML::Node.new('style:style', doc)
       
       #
       # common properties
       #
-      case style
+      case stylename
       
         when :bold, :underline, :italic, :strikethrough, :sub, :sup, :code, :a, :large, :medium, :small
-          node["style:name"]                                  =style.to_s
-          node["style:family"]                                ="text"
+          style["style:name"]                                  =stylename.to_s
+          style["style:family"]                                ="text"
           
           text_properties = Nokogiri::XML::Node.new('style:text-properties', doc)
-          node << text_properties
+          style << text_properties
           
         when /h(\d)/i
-          node["style:name"]                                  =style.to_s
-          node["style:family"]                                ="paragraph"
-          node["style:parent-style-name"]                     ="body"
-          node["style:next-style-name"]                       ="subparagraph"
-          node["style:default-outline-level"]                 =$1
+          style["style:name"]                                  =stylename.to_s
+          style["style:family"]                                ="paragraph"
+          style["style:parent-style-name"]                     ="Standard"
+          style["style:next-style-name"]                       ="paragraph"
+          style["style:default-outline-level"]                 =$1 #matches number behind 'h'
           
           paragraph_properties = Nokogiri::XML::Node.new('style:paragraph-properties', doc)
-          node << paragraph_properties
+          style << paragraph_properties
           
           text_properties = Nokogiri::XML::Node.new('style:text-properties', doc)
-          node << text_properties
+          style << text_properties
           
-        when :p, :mono, :monoright, :cling
-          node["style:name"]                                  =style.to_s
-          node["style:family"]                                ="paragraph"
-          node["style:parent-style-name"]                     ="body"
-          node["style:next-style-name"]                       ="paragraph"
-          node["style:default-outline-level"]                 =$1
+        when :p, :mono, :monoright, :monocenter, :cling
+          style["style:name"]                                  =stylename.to_s
+          style["style:family"]                                ="paragraph"
+          style["style:parent-style-name"]                     ="Standard"
+          style["style:next-style-name"]                       ="paragraph"
           
           paragraph_properties = Nokogiri::XML::Node.new('style:paragraph-properties', doc)
-          node << paragraph_properties
+          style << paragraph_properties
           
           text_properties = Nokogiri::XML::Node.new('style:text-properties', doc)
-          node << text_properties
+          style << text_properties
           
         when :subparagraph
-          node["style:name"]                                  =style.to_s
-          node["style:family"]                                ="paragraph"
-          node["style:parent-style-name"]                     ="paragraph"
-          node["style:next-style-name"]                       ="subparagraph"
-          node["style:default-outline-level"]                 =$1
+          style["style:name"]                                  =stylename.to_s
+          style["style:family"]                                ="paragraph"
+          style["style:parent-style-name"]                     ="paragraph"
+          style["style:next-style-name"]                       ="paragraph"
           
           paragraph_properties = Nokogiri::XML::Node.new('style:paragraph-properties', doc)
-          node << paragraph_properties
+          style << paragraph_properties
           
           text_properties = Nokogiri::XML::Node.new('style:text-properties', doc)
-          node << text_properties
-
+          style << text_properties
+          
         when :center, :left, :right, :justify
-          node["style:name"]                                  =style.to_s
-          node["style:family"]                                ="paragraph"
-          node["style:parent-style-name"]                     ="paragraph"
+          style["style:name"]                                  =stylename.to_s
+          style["style:family"]                                ="paragraph"
+          style["style:parent-style-name"]                     ="paragraph"
           
           paragraph_properties = Nokogiri::XML::Node.new('style:paragraph-properties', doc)
-          node << paragraph_properties
+          style << paragraph_properties
           
         when :quote, :pre
-          node["style:name"]                                  =style.to_s
-          node["style:family"]                                ="paragraph"
-          node["style:parent-style-name"]                     ="body"
+          style["style:name"]                                  =stylename.to_s
+          style["style:family"]                                ="paragraph"
+          style["style:parent-style-name"]                     ="Standard"
           
           paragraph_properties = Nokogiri::XML::Node.new('style:paragraph-properties', doc)
-          node << paragraph_properties
+          style << paragraph_properties
           
           text_properties = Nokogiri::XML::Node.new('style:text-properties', doc)
-          node << text_properties
+          style << text_properties
           
         when :table, :list, :listmedium, :invoice, :boxes, :caption, :thrifty, :tiny
-          node["style:name"]                                  =style.to_s
-          node["style:family"]                                ="table"
+          style["style:name"]                                  =stylename.to_s
+          style["style:family"]                                ="table"
           
           table_properties = Nokogiri::XML::Node.new('style:table-properties', doc)
-          node << table_properties
+          style << table_properties
           
         when :tr
-          node["style:name"]                                  =style.to_s
-          node["style:family"]                                ="table-row"
+          style["style:name"]                                  =stylename.to_s
+          style["style:family"]                                ="table-row"
           
           table_row_properties = Nokogiri::XML::Node.new('style:table-row-properties', doc)
-          node << table_row_properties
+          style << table_row_properties
           
-        when :tc, :tcnarrow, :tcwide
-          node["style:name"]                                  =style.to_s
-          node["style:family"]                                ="table-column"
+        when :tc, :tcnarrow, :tcwide, :tcfixed, :tcauto
+          style["style:name"]                                  =stylename.to_s
+          style["style:family"]                                ="table-column"
           
           table_column_properties = Nokogiri::XML::Node.new('style:table-column-properties', doc)
-          node << table_column_properties
+          style << table_column_properties
           
         when :td, :tdbott, :tdhead, :tdfoot, :tdbox
-          node["style:name"]                                  =style.to_s
-          node["style:family"]                                ="table-cell"
+          style["style:name"]                                  =stylename.to_s
+          style["style:family"]                                ="table-cell"
           
           table_cell_properties = Nokogiri::XML::Node.new('style:table-cell-properties', doc)
-          node << table_cell_properties
+          style << table_cell_properties
           
       end
       
       #
       # individual properties
       #
-      case style
+      case stylename
       
         when :bold
           text_properties["fo:font-weight"]                           ="bold"
@@ -236,7 +268,7 @@ module ODFWriter
           text_properties["fo:hyphenate"]                             ="true"
           
         when :center, :left, :right, :justify
-          paragraph_properties["fo:text-align"]                       =style.to_s
+          paragraph_properties["fo:text-align"]                       =stylename.to_s
           
         when :quote
           paragraph_properties["fo:text-align"]                       ="justify"
@@ -274,6 +306,18 @@ module ODFWriter
           text_properties["fo:font-weight"]                           ="bold"
           text_properties["fo:font-weight-asian"]                     ="bold"
           
+        when :monocenter
+          paragraph_properties["fo:text-align"]                       ="center"
+          paragraph_properties["fo:line-height"]                      ="100%"
+          paragraph_properties["fo:margin-top"]                       ="0cm"
+          paragraph_properties["fo:margin-right"]                     ="0cm"
+          paragraph_properties["fo:margin-bottom"]                    ="0cm"
+          paragraph_properties["fo:margin-left"]                      ="0cm"
+          
+          text_properties["fo:hyphenate"]                             ="false"
+          text_properties["fo:font-weight"]                           ="bold"
+          text_properties["fo:font-weight-asian"]                     ="bold"
+        
         when :pre
           paragraph_properties["fo:text-align"]                       ="left"
           paragraph_properties["fo:line-height"]                      ="100%"
@@ -288,7 +332,7 @@ module ODFWriter
           text_properties["fo:hyphenate"]                             ="true"
           text_properties["fo:font-style"]                            ="normal"
           text_properties["fo:font-style-asian"]                      ="normal"
-          text_properties["style:font-name"]                          ="Courier New"
+          text_properties["style:font-name"]                          ="'Courier New'"
           @font = {
             :font_name            => "'Courier New'", 
             :font_family          => "'Courier New'", 
@@ -297,7 +341,7 @@ module ODFWriter
           }
 
         when :code
-          text_properties["fo:font-name"]                            ="Courier New"
+          text_properties["style:font-name"]                          ="'Courier New'"
           @font = {
             :font_name            => "'Courier New'", 
             :font_family          => "'Courier New'", 
@@ -328,16 +372,16 @@ module ODFWriter
           text_properties["style:font-size-complex"]                  ="18pt"
           
         when :medium
-          text_properties["fo:font-size"]                             ="10pt"
-          text_properties["style:font-size-asian"]                    ="10pt"
-          text_properties["style:font-size-complex"]                  ="10pt"
+          text_properties["fo:font-size"]                             ="9pt"
+          text_properties["style:font-size-asian"]                    ="9pt"
+          text_properties["style:font-size-complex"]                  ="9pt"
           
         when :small
           text_properties["fo:font-size"]                             ="8pt"
           text_properties["style:font-size-asian"]                    ="8pt"
           text_properties["style:font-size-complex"]                  ="8pt"
           
-        when :table, :list, :listmedium, :invoice, :boxes, :caption, :tiny
+        when :table, :list, :invoice, :boxes
           table_properties["style:rel-width"]                         ="100%"
           table_properties["fo:margin-top"]                           ="0cm"
           table_properties["fo:margin-right"]                         ="0cm"
@@ -345,8 +389,17 @@ module ODFWriter
           table_properties["fo:margin-left"]                          ="0cm"
           table_properties["fo:text-align"]                           ="left"
         
-        when :thrifty
+        when :caption
+          table_properties["style:rel-width"]                         ="100%"
+          table_properties["fo:margin-top"]                           ="0cm"
+          table_properties["fo:margin-right"]                         ="0cm"
+          table_properties["fo:margin-bottom"]                        ="0cm"
+          table_properties["fo:margin-left"]                          ="0cm"
+          table_properties["fo:text-align"]                           ="left"
+          
+        when :thrifty, :tiny, :listmedium
           table_properties["style:rel-width"]                         ="50%"
+          table_properties["table:align"]                             ="left"
           table_properties["fo:margin-top"]                           ="0cm"
           table_properties["fo:margin-right"]                         ="0cm"
           table_properties["fo:margin-bottom"]                        ="0cm"
@@ -357,18 +410,31 @@ module ODFWriter
           # currently, nothing
         
         when :tc
-          table_column_properties["style:column-width"]               ="1cm"
-          table_column_properties["style:rel-column-width"]           ="1*"
+          table_column_properties["style:column-width"]               ="5cm"
+          table_column_properties["style:rel-column-width"]           ="100*"
           # MS Word errors, if this parameter is set
          #table_column_properties["style:use-optimal-column-width "]  ="true"
           
+        when :tcfixed
+          table_column_properties["style:column-width"]               ="5cm"
+          table_column_properties["style:rel-column-width"]           ="100*"
+         #table_column_properties["style:use-optimal-column-width "]  ="false"
+          # for use with tcnarrow and tcwide
+          
         when :tcnarrow
-          table_column_properties["style:column-width"]               ="0.5in"
-          table_column_properties["style:use-optimal-column-width "]  ="false"
+          table_column_properties["style:column-width"]               ="2.5cm"
+          table_column_properties["style:rel-column-width"]           ="50*"
+         #table_column_properties["style:use-optimal-column-width "]  ="false"
           
         when :tcwide
-          table_column_properties["style:column-width"]               ="2.0in"
-          table_column_properties["style:use-optimal-column-width "]  ="false"
+          table_column_properties["style:column-width"]               ="10.0cm"
+          table_column_properties["style:rel-column-width"]           ="200*"
+         #table_column_properties["style:use-optimal-column-width "]  ="false"
+          
+        when :tcauto
+          table_column_properties["style:column-width"]               ="5cm"
+          table_column_properties["style:rel-column-width"]           ="100*"
+         #table_column_properties["style:use-optimal-column-width "]  ="true"
           
         when :td
           table_cell_properties["style:writing-mode"]                 ="lr-tb"
@@ -381,36 +447,36 @@ module ODFWriter
           table_cell_properties["style:writing-mode"]                 ="lr-tb"
           table_cell_properties["style:vertical-align"]               ="bottom"
           table_cell_properties["fo:padding-top"]                     ="0cm"
-          table_cell_properties["fo:padding-right"]                   ="0cm"
+          table_cell_properties["fo:padding-right"]                   ="0.2cm"
           table_cell_properties["fo:padding-bottom"]                  ="0cm"
-          table_cell_properties["fo:padding-left"]                    ="0cm"
+          table_cell_properties["fo:padding-right"]                   ="0.2cm"
           
         when :tdhead
           table_cell_properties["style:writing-mode"]                 ="lr-tb"
           table_cell_properties["fo:padding-top"]                     ="0cm"
-          table_cell_properties["fo:padding-right"]                   ="0cm"
+          table_cell_properties["fo:padding-right"]                   ="0.2cm"
           table_cell_properties["fo:padding-bottom"]                  ="0.2cm"
-          table_cell_properties["fo:padding-left"]                    ="0cm"
+          table_cell_properties["fo:padding-right"]                   ="0.2cm"
           table_cell_properties["fo:border-bottom"]                   ="0.5pt solid #000000"
           
         when :tdfoot
           table_cell_properties["style:writing-mode"]                 ="lr-tb"
           table_cell_properties["fo:padding-top"]                     ="0.2cm"
-          table_cell_properties["fo:padding-right"]                   ="0cm"
+          table_cell_properties["fo:padding-right"]                   ="0.2cm"
           table_cell_properties["fo:padding-bottom"]                  ="0cm"
-          table_cell_properties["fo:padding-left"]                    ="0cm"
+          table_cell_properties["fo:padding-right"]                   ="0.2cm"
           table_cell_properties["fo:border-top"]                      ="0.5pt solid #000000"
           
         when :tdbox
           table_cell_properties["style:writing-mode"]                 ="lr-tb"
           table_cell_properties["fo:padding-top"]                     ="0cm"
-          table_cell_properties["fo:padding-right"]                   ="0cm"
+          table_cell_properties["fo:padding-right"]                   ="0.2cm"
           table_cell_properties["fo:padding-bottom"]                  ="0cm"
-          table_cell_properties["fo:padding-left"]                    ="0cm"
+          table_cell_properties["fo:padding-right"]                   ="0.2cm"
           table_cell_properties["fo:border"]                          ="0.5pt solid #000000"
       end
       
-      node
+      style
     end #def
     
   end #class

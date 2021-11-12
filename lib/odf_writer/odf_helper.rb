@@ -31,7 +31,8 @@ module ODFWriter
       ####################################################################################
       # add predefined styles to document
       ####################################################################################
-        document.add_style(      :content, *ODFWriter::Style::ALL_STYLES  )
+        document.add_style(      :content, *ODFWriter::Style::AUT_STYLES  )
+        document.add_style(      :styles,  *ODFWriter::Style::DOC_STYLES  )
         document.add_list_style( :content, *ODFWriter::Style::LIST_STYLES )
       
       ####################################################################################

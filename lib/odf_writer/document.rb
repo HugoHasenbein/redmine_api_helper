@@ -317,7 +317,8 @@ module ODFWriter
       
         template.update_files do |file, doc, manifest|
         
-          @styles[file].to_a.each      { |s| s.add_style(doc) }
+          @styles[file].to_a.each      { |s| s.add_document_style(doc)  }
+          @styles[file].to_a.each      { |s| s.add_automatic_style(doc) }
           @list_styles[file].to_a.each { |s| s.add_list_style(doc)  }
           
           @sections[file].to_a.each    { |s| s.replace!(doc, manifest, template)  }

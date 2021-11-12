@@ -45,7 +45,6 @@ module ODFWriter
       # table:      blank (white) cells, no borders,                 bold face,            
       # thrifty     blank (white) cells, no borders,                 normal face,          
       # tiny        blank (white) cells, no borders,                 tiny face,            
-      # headmedium  blank (white) cells, header rows bottom borders, medium face           
       # listmedium  blank (white) cells, header rows bottom borders, medium face          , footer rows top-borders
       #
       # list:       blank (white) cells, header rows bottom borders, normal face,         , footer rows top-borders
@@ -56,68 +55,61 @@ module ODFWriter
       # tc:      column width
       # tcs:     first column width and last column width
       #
-      TABLECLASSES = %w(table thrifty tiny list headmedium listmedium boxes invoice caption) 
-      TABLESTYLES  = {:table        => {:thead => {:ths => ["td", "td", "td"],             :tr => "tr", :tds => ["td", "td", "td"],               :fs => ["", "", ""],                   :ps => ["p", "p", "p"]  }, 
-                                        :tbody => {:ths => ["td", "td", "td"],             :tr => "tr", :tds => ["td", "td", "td"],               :fs => ["", "", ""],                   :ps => ["p", "p", "p"]  }, 
-                                        :tfoot => {:ths => ["td", "td", "td"],             :tr => "tr", :tds => ["td", "td", "td"],               :fs => ["", "", ""],                   :ps => ["p", "p", "p"]  }, 
-                                        
-                                        :tcs => ["tc", "tc", "tc"]
-                                       },
-                                        
-                      :thrifty      => {:thead => {:ths => ["td", "td", "td"],             :tr => "tr", :tds => ["td", "td", "td"],               :fs => ["", "", ""],                   :ps => ["p", "p", "p"] }, 
-                                        :tbody => {:ths => ["td", "td", "td"],             :tr => "tr", :tds => ["td", "td", "td"],               :fs => ["", "", ""],                   :ps => ["p", "p", "p"] }, 
-                                        :tfoot => {:ths => ["td", "td", "td"],             :tr => "tr", :tds => ["td", "td", "td"],               :fs => ["", "", ""],                   :ps => ["p", "p", "p"] }, 
+      TABLECLASSES = %w(table thrifty tiny list listmedium boxes invoice caption) 
+      TABLESTYLES  = {:table        => {:thead => {:tr => "tr", :ths =>{:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["p", "p", "p"]},                            :tds => {:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["p", "p", "p"]} }, 
+                                        :tbody => {:tr => "tr", :ths =>{:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["p", "p", "p"]},                            :tds => {:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["p", "p", "p"]} }, 
+                                        :tfoot => {:tr => "tr", :ths =>{:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["p", "p", "p"]},                            :tds => {:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["p", "p", "p"]} }, 
                                         
                                         :tcs => ["tc", "tc", "tc"]
                                        },
                                        
-                      :tiny         => {:thead => {:ths => ["td", "td", "td"],             :tr => "tr", :tds => ["td", "td", "td"],               :fs => ["small", "small", "small"],    :ps => ["p", "p", "p"] }, 
-                                        :tbody => {:ths => ["td", "td", "td"],             :tr => "tr", :tds => ["td", "td", "td"],               :fs => ["small", "small", "small"],    :ps => ["p", "p", "p"] }, 
-                                        :tfoot => {:ths => ["td", "td", "td"],             :tr => "tr", :tds => ["td", "td", "td"],               :fs => ["small", "small", "small"],    :ps => ["p", "p", "p"] }, 
+                      :thrifty      => {:thead => {:tr => "tr", :ths =>{:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["p", "p", "p"]},                            :tds => {:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["p", "p", "p"]} }, 
+                                        :tbody => {:tr => "tr", :ths =>{:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["p", "p", "p"]},                            :tds => {:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["p", "p", "p"]} }, 
+                                        :tfoot => {:tr => "tr", :ths =>{:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["p", "p", "p"]},                            :tds => {:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["p", "p", "p"]} }, 
                                         
                                         :tcs => ["tc", "tc", "tc"]
                                        },
                                        
-                      :list         => {:thead => {:ths => ["tdhead", "tdhead", "tdhead"], :tr => "tr", :tds => ["tdhead",  "tdhead", "tdhead"],  :fs => ["", "", ""],                   :ps => ["mono", "mono", "mono"]     }, 
-                                        :tbody => {:ths => ["tdhead", "tdhead", "tdhead"], :tr => "tr", :tds => ["td",      "td"    , "td"],      :fs => ["", "", ""],                   :ps => ["", "", ""]     }, 
-                                        :tfoot => {:ths => ["tdfoot", "tdfoot", "tdfoot"], :tr => "tr", :tds => ["tdfoot",  "tdfoot", "tdfoot"],  :fs => ["", "", ""],                   :ps => ["mono", "mono", "mono"]     }, 
-                                        
-                                        :tcs => ["tcnarrow", "tc", "tcnarrow"]
-                                       },
-                                        
-                      :headmedium   => {:thead => {:ths => ["tdhead", "tdhead", "tdhead"], :tr => "tr", :tds => ["tdhead",  "tdhead", "tdhead"],  :fs => ["medium", "medium", "medium"], :ps => ["mono", "mono", "mono"]     }, 
-                                        :tbody => {:ths => ["tdhead", "tdhead", "tdhead"], :tr => "tr", :tds => ["td",      "td"    , "td"],      :fs => ["medium", "medium", "medium"], :ps => ["", "", ""]     }, 
-                                        :tfoot => {:ths => ["tdfoot", "tdfoot", "tdfoot"], :tr => "tr", :tds => ["td",      "td",     "td"],      :fs => ["medium", "medium", "medium"], :ps => ["", "", ""]     }, 
-                                        
-                                        :tcs => ["tcnarrow", "tc", "tcnarrow"]
-                                       },
-                                       
-                      :listmedium   => {:thead => {:ths => ["tdhead", "tdhead", "tdhead"], :tr => "tr", :tds => ["tdhead",  "tdhead", "tdhead"],  :fs => ["medium", "medium", "medium"], :ps => ["mono", "mono", "mono"]     }, 
-                                        :tbody => {:ths => ["tdhead", "tdhead", "tdhead"], :tr => "tr", :tds => ["td",      "td"    , "td"],      :fs => ["medium", "medium", "medium"], :ps => ["", "", ""]     }, 
-                                        :tfoot => {:ths => ["tdfoot", "tdfoot", "tdfoot"], :tr => "tr", :tds => ["tdfoot",  "tdfoot", "tdfoot"],  :fs => ["medium", "medium", "medium"], :ps => ["mono", "mono", "mono"]     }, 
-                                        
-                                        :tcs => ["tcnarrow", "tc", "tcnarrow"]
-                                       },
-                                       
-                      :boxes        => {:thead => {:ths => ["tdbox", "tdbox", "tdbox"],    :tr => "tr", :tds => ["tdbox", "tdbox", "tdbox"],      :fs => ["", "", ""],                   :ps => ["p", "p", "p"]  }, 
-                                        :tbody => {:ths => ["tdbox", "tdbox", "tdbox"],    :tr => "tr", :tds => ["tdbox", "tdbox", "tdbox"],      :fs => ["", "", ""],                   :ps => ["p", "p", "p"]  }, 
-                                        :tfoot => {:ths => ["tdbox", "tdbox", "tdbox"],    :tr => "tr", :tds => ["tdbox", "tdbox", "tdbox"],      :fs => ["", "", ""],                   :ps => ["p", "p", "p"]  }, 
+                      :tiny         => {:thead => {:tr => "tr", :ths =>{:tds => ["td", "td", "td"],             :fs => ["small", "small", "small"],    :ps => ["p", "p", "p"]},                            :tds => {:tds => ["td", "td", "td"],             :fs => ["small", "small", "small"],    :ps => ["p", "p", "p"]} }, 
+                                        :tbody => {:tr => "tr", :ths =>{:tds => ["td", "td", "td"],             :fs => ["small", "small", "small"],    :ps => ["p", "p", "p"]},                            :tds => {:tds => ["td", "td", "td"],             :fs => ["small", "small", "small"],    :ps => ["p", "p", "p"]} }, 
+                                        :tfoot => {:tr => "tr", :ths =>{:tds => ["td", "td", "td"],             :fs => ["small", "small", "small"],    :ps => ["p", "p", "p"]},                            :tds => {:tds => ["td", "td", "td"],             :fs => ["small", "small", "small"],    :ps => ["p", "p", "p"]} }, 
                                         
                                         :tcs => ["tc", "tc", "tc"]
                                        },
+                                       
+                      :list         => {:thead => {:tr => "tr", :ths =>{:tds => ["tdhead", "tdhead", "tdhead"], :fs => ["", "", ""],                   :ps => ["monoright", "mono", "mono"]},              :tds => {:tds => ["tdhead", "tdhead", "tdhead"], :fs => ["", "", ""],                   :ps => ["right", "p", "p"]} }, 
+                                        :tbody => {:tr => "tr", :ths =>{:tds => ["tdhead", "tdhead", "tdhead"], :fs => ["", "", ""],                   :ps => ["monoright", "mono", "mono"]},              :tds => {:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["right", "p", "p"]} }, 
+                                        :tfoot => {:tr => "tr", :ths =>{:tds => ["tdfoot", "tdfoot", "tdfoot"], :fs => ["", "", ""],                   :ps => ["monoright", "mono", "mono"]},              :tds => {:tds => ["tdfoot", "tdfoot", "tdfoot"], :fs => ["", "", ""],                   :ps => ["right", "p", "p"]} }, 
+                                                      
+                                        :tcs => ["tcnarrow", "tcfixed", "tcfixed"]
+                                       },
+                                       
+                      :listmedium   => {:thead => {:tr => "tr", :ths =>{:tds => ["tdhead", "tdhead", "tdhead"], :fs => ["medium", "medium", "medium"], :ps => ["monoright", "mono", "mono"]},              :tds => {:tds => ["tdhead", "tdhead", "tdhead"], :fs => ["medium", "medium", "medium"], :ps => ["right", "p", "p"]} }, 
+                                        :tbody => {:tr => "tr", :ths =>{:tds => ["tdhead", "tdhead", "tdhead"], :fs => ["medium", "medium", "medium"], :ps => ["monoright", "mono", "mono"]},              :tds => {:tds => ["td", "td", "td"],             :fs => ["medium", "medium", "medium"], :ps => ["right", "p", "p"]} }, 
+                                        :tfoot => {:tr => "tr", :ths =>{:tds => ["tdfoot", "tdfoot", "tdfoot"], :fs => ["medium", "medium", "medium"], :ps => ["monoright", "mono", "mono"]},              :tds => {:tds => ["tdfoot", "tdfoot", "tdfoot"], :fs => ["medium", "medium", "medium"], :ps => ["right", "p", "p"]} }, 
+                                                      
+                                        :tcs => ["tcnarrow", "tcfixed", "tcfixed"]
+                                       },
+                                       
+                      :boxes        => {:thead => {:tr => "tr", :ths =>{:tds => ["tdbox", "tdbox", "tdbox"],    :fs => ["", "", ""],                   :ps => ["monocenter", "monocenter", "monocenter"]}, :tds => {:tds => ["tdbox", "tdbox", "tdbox"],    :fs => ["", "", ""],                   :ps => ["center", "center", "center"]} }, 
+                                        :tbody => {:tr => "tr", :ths =>{:tds => ["tdbox", "tdbox", "tdbox"],    :fs => ["", "", ""],                   :ps => ["monocenter", "monocenter", "monocenter"]}, :tds => {:tds => ["tdbox", "tdbox", "tdbox"],    :fs => ["", "", ""],                   :ps => ["center", "center", "center"]} }, 
+                                        :tfoot => {:tr => "tr", :ths =>{:tds => ["tdbox", "tdbox", "tdbox"],    :fs => ["", "", ""],                   :ps => ["monocenter", "monocenter", "monocenter"]}, :tds => {:tds => ["tdbox", "tdbox", "tdbox"],    :fs => ["", "", ""],                   :ps => ["center", "center", "center"]} }, 
                                         
-                      :invoice      => {:thead => {:ths => ["tdhead", "tdhead", "tdhead"], :tr => "tr", :tds => ["tdhead", "tdhead",  "tdhead" ], :fs => ["medium", "medium", "medium"], :ps => ["mono",    "monoright", "monoright" ] }, 
-                                        :tbody => {:ths => ["tdhead", "tdhead", "tdhead"], :tr => "tr", :tds => ["tdbott", "tdbott",  "tdbott" ], :fs => ["medium", "medium", "medium"], :ps => ["justify",     "right",     "right" ] }, 
-                                        :tfoot => {:ths => ["tdfoot", "tdfoot", "tdfoot"], :tr => "tr", :tds => ["tdfoot", "tdfoot",  "tdfoot" ], :fs => ["medium", "medium", "medium"], :ps => ["mono",    "monoright", "monoright" ] }, 
+                                        :tcs => ["tc", "tc", "tc"]
+                                       },
+                                       
+                      :invoice      => {:thead => {:tr => "tr", :ths =>{:tds => ["tdhead", "tdhead", "tdhead"], :fs => ["medium", "medium", "medium"], :ps => ["mono",    "monoright", "monoright" ]},     :tds => {:tds => ["tdhead", "tdhead", "tdhead"], :fs => ["medium", "medium", "medium"], :ps => ["p", "right", "right" ]} }, 
+                                        :tbody => {:tr => "tr", :ths =>{:tds => ["tdhead", "tdhead", "tdhead"], :fs => ["medium", "medium", "medium"], :ps => ["mono",    "monoright", "monoright" ]},     :tds => {:tds => ["td", "td", "td"],             :fs => ["medium", "medium", "medium"], :ps => ["p", "right", "right" ]} }, 
+                                        :tfoot => {:tr => "tr", :ths =>{:tds => ["tdfoot", "tdfoot", "tdfoot"], :fs => ["medium", "medium", "medium"], :ps => ["mono",    "monoright", "monoright" ]},     :tds => {:tds => ["tdfoot", "tdfoot", "tdfoot"], :fs => ["medium", "medium", "medium"], :ps => ["p", "right", "right" ]} }, 
                                         
                                         :tcs => ["tcwide", "tcnarrow", "tcnarrow"]
                                        },
+                                       
+                      :caption      => {:thead => {:tr => "tr", :ths =>{:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["mono", "mono", "mono"]},                   :tds => {:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["mono", "mono", "mono"]} }, 
+                                        :tbody => {:tr => "tr", :ths =>{:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["mono", "mono", "mono"]},                   :tds => {:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["mono", "mono", "mono"]} }, 
+                                        :tfoot => {:tr => "tr", :ths =>{:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["mono", "mono", "mono"]},                   :tds => {:tds => ["td", "td", "td"],             :fs => ["", "", ""],                   :ps => ["mono", "mono", "mono"]} }, 
                                         
-                      :caption      => {:thead => {:ths => ["td", "td", "td"],             :tr => "tr", :tds => ["td", "td", "td"],               :fs => ["", "", ""],                   :ps => ["mono", "mono", "mono"] }, 
-                                        :tbody => {:ths => ["td", "td", "td"],             :tr => "tr", :tds => ["td", "td", "td"],               :fs => ["", "", ""],                   :ps => ["mono", "mono", "mono"] }, 
-                                        :tfoot => {:ths => ["td", "td", "td"],             :tr => "tr", :tds => ["td", "td", "td"],               :fs => ["", "", ""],                   :ps => ["mono", "mono", "mono"] }, 
-                                        
-                                        :tcs => ["tc", "tc", "tc"]
+                                        :tcs => ["tcnarrow", "tcwide", "tcwide"]
                                        }
                       }
                       
@@ -272,13 +264,13 @@ module ODFWriter
           li = text_node("list-item")
           
           node.xpath("./text()").each do |text|
-            text.replace( blank_node("p", "li", text) ) if text.text.present?
+            text.replace( blank_node("p", "", text) ) if text.text.present?
             text.remove unless text.text.present?
           end
           
           node.children.each do |child|
-            child = child.replace( text_node("p", "li") << child.dup ) if INLINE.include?(child.name)
-            child = child.replace( text_node("p", "li") << child.dup ) if TEXTINLINE.include?(child.name)
+            child = child.replace( text_node("p", "") << child.dup ) if INLINE.include?(child.name)
+            child = child.replace( text_node("p", "") << child.dup ) if TEXTINLINE.include?(child.name)
             li << parse_formatting(child, level+1).root
           end
           
@@ -289,6 +281,13 @@ module ODFWriter
         # nested unordered lists
         #
         html.xpath("//*[self::ul]").each do |node|
+        
+          # unpack lists, which should not be encapsulated in a <p> tag, 
+          # to be compatible with odf. Move them below the paragraph
+          if ["text:p", "p"].include? node.parent.name
+            node = node.parent.add_next_sibling( node )
+          end
+          
           ul  = text_node("list", "ul", node)
           node.replace( parse_formatting(ul, level+1).root )
         end
@@ -297,6 +296,13 @@ module ODFWriter
         # nested unordered lists
         #
         html.xpath("//*[self::ol]").each do |node|
+        
+          # unpack lists, which should not be encapsulated in a <p> tag, 
+          # to be compatible with odf. Move them below the paragraph
+          if ["text:p", "p"].include? node.parent.name
+            node = node.parent.add_next_sibling( node )
+          end
+          
           ol  = text_node("list", "ol", node)
           node.replace( parse_formatting(ol, level+1).root )
         end
@@ -311,16 +317,16 @@ module ODFWriter
         html.xpath("//*[self::table]").each do |node|
         
           # unpack tables, which should not be encapsulated in a <p> tag, 
-          # but which is often seen
+          # to be compatible with odf. Move them below the paragraph
           if ["text:p", "p"].include? node.parent.name
-            node = node.parent.replace( node.dup )
+            node = node.parent.add_next_sibling( node )
           end
           
           #
           # use last matching css class for matching a local style
           #
           cssclasses = node["class"].to_s.split(/\ /)
-          cssc       = (cssclasses & TABLECLASSES).last&.to_sym || :table
+          cssc       = (cssclasses & TABLECLASSES).last.presence&.to_sym || :table
           
           table  = table_node("table",  cssc.to_s, node)
           table["table:template-name"]= cssc.to_s.camelcase
@@ -373,9 +379,9 @@ module ODFWriter
             new_table.xpath(".//*[self::#{rowgroup}]").each do |row_group_node|
               case rowgroup
               when :thead
-                trg  = table_node("table-header-rows", "#{rowgroup}", row_group_node)
+                trg  = table_node("table-header-rows", "", row_group_node)
               else
-                trg  = table_node("table-rows",        "#{rowgroup}", row_group_node)
+                trg  = table_node("table-rows",        "", row_group_node)
               end
               #new_row_group_node = row_group_node.replace( parse_formatting(trg, level+1).root )
               new_row_group_node = row_group_node.replace( trg )
@@ -397,17 +403,17 @@ module ODFWriter
                 new_tr_node.xpath(".//*[self::th or self::td]").each_with_index do |td_node, td_index|
                   
                   if td_index == 0 #first column
-                    tdcss = TABLESTYLES.dig(cssc, rowgroup, "#{td_node.name}s".to_sym ).to_a[0]
-                    pcss  = TABLESTYLES.dig(cssc, rowgroup, :ps  ).to_a[0]
-                    fcss  = TABLESTYLES.dig(cssc, rowgroup, :fs  ).to_a[0]
+                    tdcss = TABLESTYLES.dig(cssc, rowgroup, "#{td_node.name}s".to_sym, :tds ).to_a[0]
+                    pcss  = TABLESTYLES.dig(cssc, rowgroup, "#{td_node.name}s".to_sym, :ps  ).to_a[0]
+                    fcss  = TABLESTYLES.dig(cssc, rowgroup, "#{td_node.name}s".to_sym, :fs  ).to_a[0]
                   elsif td_index == (max_cols - 1) #last column
-                    tdcss = TABLESTYLES.dig(cssc, rowgroup, "#{td_node.name}s".to_sym ).to_a[2]
-                    pcss  = TABLESTYLES.dig(cssc, rowgroup, :ps  ).to_a[2]
-                    fcss  = TABLESTYLES.dig(cssc, rowgroup, :fs  ).to_a[2]
+                    tdcss = TABLESTYLES.dig(cssc, rowgroup, "#{td_node.name}s".to_sym, :tds ).to_a[2]
+                    pcss  = TABLESTYLES.dig(cssc, rowgroup, "#{td_node.name}s".to_sym, :ps  ).to_a[2]
+                    fcss  = TABLESTYLES.dig(cssc, rowgroup, "#{td_node.name}s".to_sym, :fs  ).to_a[2]
                   else
-                    tdcss = TABLESTYLES.dig(cssc, rowgroup, "#{td_node.name}s".to_sym ).to_a[1]
-                    pcss  = TABLESTYLES.dig(cssc, rowgroup, :ps  ).to_a[1]
-                    fcss  = TABLESTYLES.dig(cssc, rowgroup, :fs  ).to_a[1]
+                    tdcss = TABLESTYLES.dig(cssc, rowgroup, "#{td_node.name}s".to_sym, :tds ).to_a[1]
+                    pcss  = TABLESTYLES.dig(cssc, rowgroup, "#{td_node.name}s".to_sym, :ps  ).to_a[1]
+                    fcss  = TABLESTYLES.dig(cssc, rowgroup, "#{td_node.name}s".to_sym, :fs  ).to_a[1]
                   end
                   
                   td = table_node("table-cell", tdcss)
